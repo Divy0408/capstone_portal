@@ -12,6 +12,11 @@ const client = new Client({
     }   
 });
 
+// Connect to PostgreSQL database when the server starts
+client.connect()
+    .then(() => console.log('Connected to PostgreSQL database'))
+    .catch(err => console.error('Error connecting to PostgreSQL database:', err));
+
 // Middleware to parse request bodies as JSON
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -20,7 +25,9 @@ app.use(express.static(__dirname));
 
 // Route to serve the login page
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    // Check for error message in URL query parameters
+    const errorMessage = req.query.error ? req.query.error : '';
+    res.sendFile(__dirname + '/index.html', { error: errorMessage });
 });
 
 // Route to handle login form submission
@@ -28,9 +35,7 @@ app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        await client.connect();
-
-        // Query to check if the user exists with the provided email and password
+        // Query to check if any user exists with the provided email and password
         const query = 'SELECT * FROM users WHERE email = $1 AND password = $2';
         const result = await client.query(query, [email, password]);
 
