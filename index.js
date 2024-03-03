@@ -44,8 +44,6 @@ app.post('/login', async (req, res) => {
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal server error');
-    } finally {
-        await client.end();
     }
 });
 
