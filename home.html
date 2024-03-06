@@ -1,165 +1,25 @@
-<style>
-  .container {
-    border-radius: 75px;
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    padding: 50px 17px 50px 80px;
-  }
-
-  .icon-circle {
-    background-color: #0008c5;
-    border-radius: 50%;
-    width: 58px;
-    height: 52px;
-    margin: 30px 0 0 18px;
-  }
-
-  .navbar {
-    display: flex;
-    margin-left: 49px;
-    width: 930px;
-    max-width: 100%;
-    align-items: start;
-    justify-content: space-between;
-    gap: 20px;
-    font-size: 24px;
-    color: #000;
-    font-weight: 700;
-  }
-
-  .highlight-box {
-    border-radius: 12px;
-    background-color: #00cbd7;
-    width: 41px;
-    height: 37px;
-  }
-
-  .link-box {
-    display: flex;
-    margin-top: 19px;
-    align-items: start;
-    justify-content: space-between;
-    gap: 20px;
-  }
-
-  .link-text, .account-text, .project-text {
-    font-family: Inter, sans-serif;
-  }
-
-  .divider {
-    background-color: #00cbd7;
-    margin-top: 19px;
-    height: 1px;
-  }
-
-  .main-content {
-    align-self: stretch;
-    margin: 74px 0 0 18px;
-  }
-
-  .content-layout {
-    gap: 20px;
-    display: flex;
-  }
-
-  .content-column {
-    display: flex;
-    flex-direction: column;
-    line-height: normal;
-    width: 38%;
-    margin-left: 0px;
-  }
-
-  .intro-section {
-    display: flex;
-    flex-direction: column;
-    align-self: stretch;
-    font-weight: 700;
-    margin: auto 0;
-  }
-
-  .intro-heading {
-    color: #0008c5;
-    font: 78px Inter, sans-serif;
-  }
-
-  .intro-desc {
-    color: #000;
-    margin-top: 98px;
-    font: 400 28px Inter, sans-serif;
-  }
-
-  .action-button {
-    border-radius: 20px;
-    background-color: #00cbd7;
-    align-self: center;
-    margin-top: 96px;
-    justify-content: center;
-    color: #fff;
-    white-space: nowrap;
-    padding: 15px 21px;
-    font: 21px Inter, sans-serif;
-  }
-
-  .image-column {
-    display: flex;
-    flex-direction: column;
-    line-height: normal;
-    width: 62%;
-    margin-left: 20px;
-  }
-
-  .image {
-    aspect-ratio: 1.28;
-    object-fit: auto;
-    object-position: center;
-    width: 100%;
-    flex-grow: 1;
-  }
-
-  @media (max-width: 991px) {
-    .container {
-      padding-left: 20px;
-    }
-
-    .icon-circle, .navbar, .link-box, .main-content, .content-layout, .content-column, .intro-section, .intro-heading, .intro-desc, .action-button, .image-column, .image {
-      margin-left: 10px;
-      flex-wrap: wrap;
-      max-width: 100%;
-      align-items: stretch;
-      font-size: smaller;
-    }
-  }
-</style>
-
-<section class="container">
-  <div class="icon-circle"></div>
-  <nav class="navbar">
-    <div class="highlight-box"></div>
-    <div class="link-box">
-      <div class="link-text">ABOUT</div>
-      <div>
-        <div class="link-text">HOME</div>
-        <div class="divider"></div>
-      </div>
-      <div class="project-text">PROJECT</div>
-    </div>
-    <div class="account-text">ACCOUNT</div>
-  </nav>
-  <div class="main-content">
-    <div class="content-layout">
-      <div class="content-column">
-        <form class="intro-section">
-          <h1 class="intro-heading">Capstone Portal</h1>
-          <p class="intro-desc">The P in PM is as much about 'people management' as it is about 'project management'</p>
-          <button class="action-button" type="submit">GET STARTED</button>
-        </form>
-      </div>
-      <aside class="image-column">
-        <img loading="lazy" src="image 1.png" class="image" alt="Capstone Portal"/>
-      </aside>
-    </div>
-  </div>
-</section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+</head>
+<body>
+  <div style="width: 100%; height: 100%; position: relative; background: white; border-radius: 75px">
+    <div style="width: 503px; height: 197px; left: 98px; top: 573px; position: absolute; color: black; font-size: 28px; font-family: Inter; font-weight: 400; word-wrap: break-word">The P in PM is as much about 'people management' as it is about 'project management'</div>
+    <div style="left: 733px; top: 120px; position: absolute; color: black; font-size: 24px; font-family: Inter; font-weight: 700; word-wrap: break-word">PROJECT</div>
+    <div style="left: 937px; top: 120px; position: absolute; color: black; font-size: 24px; font-family: Inter; font-weight: 700; word-wrap: break-word">ACCOUNT</div>
+    <div style="left: 404px; top: 120px; position: absolute; color: black; font-size: 24px; font-family: Inter; font-weight: 700; word-wrap: break-word">ABOUT </div>
+    <div style="width: 475px; height: 169px; left: 100px; top: 311px; position: absolute; color: #0008C5; font-size: 78px; font-family: Inter; font-weight: 700; word-wrap: break-word">Capstone<br/>Portal </div>
+    <div style="width: 185px; height: 45px; left: 216px; top: 770px; position: absolute; background: #00CBD7; border-radius: 20px"></div>
+    <div style="left: 239px; top: 779px; position: absolute; color: white; font-size: 21px; font-family: Inter; font-weight: 700; word-wrap: break-word">GET STARTED</div>
+    <div style="width: 58px; height: 52px; left: 100px; top: 80px; position: absolute; background: #0008C5; border-radius: 9999px"></div>
+    <div style="width: 41px; height: 37px; left: 129px; top: 106px; position: absolute; background: #00CBD7; border-radius: 12px"></div>
+    <div style="width: 112px; height: 0px; left: 556px; top: 163px; position: absolute; border: 1px #00CBD7 solid"></div>
+    <div style="width: 156px; height: 51px; left: 534px; top: 106px; position: absolute; background: #BEF0F4; box-shadow: 50px 50px 50px; border-radius: 20px; filter: blur(50px)"></div>
+    <div style="left: 575px; top: 120px; position: absolute; color: black; font-size: 24px; font-family: Inter; font-weight: 700; word-wrap: break-word">HOME</div>
+    <img style="width: 811px; height: 636px; left: 612px; top: 237px; position: absolute" src="image 1.png" />
+</div>
+</body>
+</html>
