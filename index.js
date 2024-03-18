@@ -41,7 +41,7 @@ app.post('/login', async (req, res) => {
 
         if (result.rows.length > 0) {
             // User authenticated, redirect to home page
-            res.redirect('/home.html');
+            res.redirect('indexpage/home.html');
         } else {
             // Invalid credentials, redirect back to login page with error message
             res.redirect('/?error=Invalid email or password');
