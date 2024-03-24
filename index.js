@@ -27,7 +27,7 @@ app.use(express.static(__dirname));
 app.get('/', (req, res) => {
     // Check for error message in URL query parameters
     const errorMessage = req.query.error ? req.query.error : '';
-    res.sendFile(__dirname + '/index.html', { error: errorMessage });
+    res.sendFile(__dirname + '/login.html', { error: errorMessage });
 });
 
 // Route to handle login form submission

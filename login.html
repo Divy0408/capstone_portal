@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="loginStyle.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="#">About</a>
+            <a href="home.html">Home</a>
+            <a href="#">Project</a>
+            <a href="#">Account</a>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="left-column">
+            <div class="left-column-name">
+                <h3>Hello</h3>
+            </div>
+            <center>
+            <form action="/login" method="post">
+                <!-- Email input -->
+                <div class="form-outline mb-4">
+                  <input type="email" id="email" name="email" class="form-control"  placeholder="Email" required>
+                </div>
+                <br>
+              
+                <!-- Password input -->
+                <div class="form-outline mb-4">
+                  <input type="password" id="password" name="password" class="form-control"  placeholder="Password" required>
+                </div>
+                <br>
+              
+                <!-- 2 column grid layout for inline styling -->
+                <div class="row mb-4">
+                  <div class="col">
+                    <!-- Simple link -->
+                    <a href="#!">Forgot password?</a>
+                  </div>
+                </div>
+                <br>
+                <!-- Submit button -->
+                <input type="submit" value="Sign In">
+              
+                <!-- Register buttons -->
+                <div class="text-center">
+                  <p>Not a member? <a href="register.html">Register</a></p>
+                  <p>or sign up with:</p>
+                  <button type="button" class="btn btn-link btn-floating mx-1">
+                    <i class="fab fa-facebook-f"></i>
+                  </button>
+              
+                  <button type="button" class="btn btn-link btn-floating mx-1">
+                    <i class="fab fa-google"></i>
+                  </button>
+              
+                  <button type="button" class="btn btn-link btn-floating mx-1">
+                    <i class="fab fa-twitter"></i>
+                  </button>
+              
+                  <button type="button" class="btn btn-link btn-floating mx-1">
+                    <i class="fab fa-github"></i>
+                  </button>
+                </div>
+              </form>
+            </center>
+        </div>
+        <div class="right-column">
+            <image class="homeimage" src="loginpageimage.png">
+
+            </image>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 Your Company</p>
+    </footer>
+
+</body>
+
+</html>
