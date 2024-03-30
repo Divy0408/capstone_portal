@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Your Project Details</title>
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f6f6;
+            color: #333;
+        }
+
+        header, footer {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .submission-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .submission-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .submission-form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .submission-form input,
+        .submission-form select,
+        .submission-form textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .submission-form button {
+            width: calc(100% - 22px);
+            padding: 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+        .submission-form button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            margin-top: 20px;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .social-media .icon {
+            margin: 0 5px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Upload Your Project Details</h1>
+        <p>Share Your Creativity with Us!</p>
+    </header>
+    <main>
+        <div class="submission-container">
+            <section class="submission-form">
+                <h2>Submit Your Project</h2>
+                <form action="/project" method="POST" enctype="multipart/form-data" onsubmit="showAlert()">
+                    <label for="studentName">Name:</label>
+                    <input type="text" id="studentName" name="studentName" required>
+
+                    <label for="studentErNo">Enrollment Number:</label>
+                    <input type="text" id="studentErNo" name="studentErNo" pattern="[0-9]{11}" title="Enrollment number must be 11 digits" required>
+                    
+                    <label for="branch">Branch:</label>
+                    <select id="branch" name="branch" required>
+                        <option value="CE">C.E</option>
+                        <option value="IT">I.T</option>
+                        <option value="CSBS">CSBS</option>
+                        <option value="CEAI">CE-AI</option>
+                    </select>
+
+                    <label for="projectTitle">Project Title:</label>
+                    <input type="text" id="projectTitle" name="projectTitle" required>
+
+                    <label for="projectDescription">Project Description:</label>
+                    <textarea id="projectDescription" name="projectDescription" rows="4" required></textarea>
+
+                    <label for="upload-file">Upload File:</label>
+                    <input type="file" id='upload-file' name='upload-file' accept=".pdf,.doc,.docx,.jpg,.png" required>
+
+                    <label for="additionalComments">Additional Comments:</label>
+                    <textarea id="additionalComments" name="additionalComments" rows="2"></textarea>
+
+                    <button type="submit">Upload</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>Contact us: email@example.com</p>
+        </div>
+    </footer>
+
+    <script>
+        function showAlert() {
+            alert("Project details submitted successfully!");
+        }
+    </script>
+</body>
+</html>

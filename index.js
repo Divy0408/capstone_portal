@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const path = require('path');
 const { Client } = require('pg');
 
 const app = express();
@@ -17,8 +19,11 @@ client.connect()
     .then(() => console.log('Connected to PostgreSQL database'))
     .catch(err => console.error('Error connecting to PostgreSQL database:', err));
 
+const upload = multer({ dest: 'uploads/' }); // Set destination folder for file uploads
+
 // Middleware to parse request bodies as JSON
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Serve static files (HTML, CSS, etc.)
 app.use(express.static(__dirname));
@@ -78,6 +83,27 @@ function isEmail(input) {
     // Simple email validation regex, can be improved for production use
     return /\S+@ganpatuniversity\.ac\.in$/.test(input);
 }
+
+// Route to handle form submission
+app.post('/project', upload.single('upload-file'), async (req, res) => {
+    try {
+        // Extract form data
+        const { studentName, studentErNo, branch, projectTitle, projectDescription, additionalComments } = req.body;
+
+        // Retrieve uploaded file
+        const uploadFile = req.file;
+
+        // Insert form data into the database
+        const query = 'INSERT INTO projects (student_name, student_er_no, branch, project_title, project_description, file_path, additional_comments) VALUES ($1, $2, $3, $4, $5, $6, $7)';
+        await client.query(query, [studentName, studentErNo, branch, projectTitle, projectDescription, uploadFile, additionalComments]);
+
+        // Send a success response
+        res.redirect('/home.html');
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal server error');
+    }
+});
 
 // Start the server
 app.listen(port, () => {
