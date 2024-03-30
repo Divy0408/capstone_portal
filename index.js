@@ -32,25 +32,52 @@ app.get('/', (req, res) => {
 
 // Route to handle login form submission
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { credential, password } = req.body;
 
     try {
-        // Query to check if any user exists with the provided email and password
-        const query = 'SELECT * FROM users WHERE email = $1 AND password = $2';
-        const result = await client.query(query, [email, password]);
+        let query;
+        if (isEnrollmentNumber(credential)){
+        query = 'SELECT * FROM students WHERE enrollment = $1 AND password = $2';
+        }
+        else if (isEmail(credential)){
+            query = 'SELECT * FROM faculty WHERE email = $1 AND password = $2';
+        }
+        else{
+            res.redirect('/?error=Invalid input format');
+            return;
+        }
+
+        const result = await client.query(query, [credential, password]);
 
         if (result.rows.length > 0) {
             // User authenticated, redirect to home page
-            res.redirect('/home.html');
+            if (isEnrollmentNumber(credential)) {
+                res.redirect('/home.html');
+            }
+            else if(isEmail(credential)){
+                res.redirect('/home.html');
+            }
         } else {
             // Invalid credentials, redirect back to login page with error message
-            res.redirect('/?error=Invalid email or password');
+            res.redirect('/?error=Invalid Credentials');
         }
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal server error');
     }
 });
+
+// Function to check if input resembles an enrollment number
+function isEnrollmentNumber(input) {
+    // Check if input consists of 11 digits
+    return /^\d{11}$/.test(input);
+}
+
+// Function to check if input resembles an email address
+function isEmail(input) {
+    // Simple email validation regex, can be improved for production use
+    return /\S+@ganpatuniversity\.ac\.in$/.test(input);
+}
 
 // Start the server
 app.listen(port, () => {
