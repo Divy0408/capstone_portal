@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capstone Portal Account Page</title>
+    <link rel="icon" href="logo.png">
+    <style>
+        
+        body {
+            margin: 0;
+            font-style: Condensed;
+            font-weight: 600;
+        }
+
+        header {
+            background-color: #d8d8d8;
+            color: #000000;
+            padding: 20px 0;
+            border-bottom: 2px solid #47c8ff; 
+        }
+
+        .menu a:hover,
+        .menu a:focus {
+            color: #ff7920; 
+            border-bottom: 2px solid #ff7920; 
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            display: block;
+            margin-right: 10px; 
+        }
+
+        .logo h1 {
+            font-size: 40px;
+            margin: 0;
+            font-family: 'Bebas Neue', sans-serif; 
+            color: #47c8ff; 
+        }
+
+        .menu a {
+            color: #000000;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 30px;
+            transition: color 0.3s ease; 
+        }
+
+        .signin-btn {
+            background-color: #47c8ff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 30px;
+            cursor: pointer;
+            border-radius: 20px; 
+            transition: background-color 0.3s ease; 
+        }
+
+        .signin-btn:hover {
+            background-color: #ff7920;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2px auto;
+            width: 100%;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #47c8ff;
+        }
+
+        #studentInfo {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        p {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="logo.png" alt="Capstone Portal Logo" width="120" height="120">
+                &nbsp;&nbsp;&nbsp;&nbsp;<h1>Capstone Portal</h1> 
+            </div>
+            <div class="menu">
+                <a href="homePage.html">Home</a>
+                <a href="#">About</a>
+                <a href="projectUpload.html">Project</a>
+                <button class="signin-btn">Login</button>
+            </div>
+        </nav>
+    </header>
+    <br>
+    <br>
+    <h1>Welcome to your account</h1>
+    <div id="studentInfo">
+        <p>Name: <span id="studentName"></span></p>
+        <p>Enrollment: <span id="enrollment"></span></p>
+        <p>Class: <span id="class"></span></p>
+        <p>Batch: <span id="batch"></span></p>
+        <p>CP-II Guide Name: <span id="cpIIGuideName"></span></p>
+        <p>Project Title: <span id="projectTitle"></span></p>
+        <p>Email ID: <span id="emailId"></span></p>
+        <p>Attendance: <span id="attendance"></span></p>
+    </div>
+
+    <script>
+        // Replace placeholders with actual student information
+        document.getElementById('studentName').innerText = '{{studentName}}';
+        document.getElementById('enrollment').innerText = '{{enrollment}}';
+        document.getElementById('class').innerText = '{{class}}';
+        document.getElementById('batch').innerText = '{{batch}}';
+        document.getElementById('cpIIGuideName').innerText = '{{cpIIGuideName}}';
+        document.getElementById('projectTitle').innerText = '{{projectTitle}}';
+        document.getElementById('emailId').innerText = '{{emailId}}';
+        document.getElementById('attendance').innerText = '{{attendance}}';
+    </script>
+</body>
+</html>
