@@ -109,7 +109,7 @@ app.post('/project', upload.single('upload-file'), async (req, res) => {
         await client.query(query, [studentName, studentErNo, branch, projectTitle, projectDescription, uploadFile, additionalComments]);
 
         // Send a success response
-        res.redirect('/homePage.html');
+        res.redirect('/home.html');
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal server error');
