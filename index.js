@@ -46,14 +46,14 @@ app.get('/', (req, res) => {
 
 // Route to handle login form submission
 app.post('/login', async (req, res) => {
-    const { credential, password } = req.body;
+    const { username, password } = req.body;
 
     try {
         let query;
-        if (isEnrollmentNumber(credential)){
+        if (isEnrollmentNumber(username)){
         query = 'SELECT * FROM students WHERE enrollment = $1 AND password = $2';
         }
-        else if (isEmail(credential)){
+        else if (isEmail(username)){
             query = 'SELECT * FROM faculty WHERE email = $1 AND password = $2';
         }
         else{
@@ -61,16 +61,16 @@ app.post('/login', async (req, res) => {
             return;
         }
 
-        const result = await client.query(query, [credential, password]);
+        const result = await client.query(query, [username, password]);
 
         if (result.rows.length > 0) {
             // User authenticated, redirect to home page
-            if (isEnrollmentNumber(credential)) {
-                req.session.credential = credential;
+            if (isEnrollmentNumber(username)) {
+                req.session.username = username;
                 res.redirect('/home.html');
             }
-            else if (isEmail(credential)) {
-                req.session.credential = credential;
+            else if (isEmail(username)) {
+                req.session.username = username;
                 res.redirect('/home.html');
             }
         } else {
@@ -95,8 +95,21 @@ function isEmail(input) {
     return /\S+@ganpatuniversity\.ac\.in$/.test(input);
 }
 
+app.get('/project', async(req, res) => {
+    const enrollment = req.session.username;
+    if (!enrollment) {
+        res.redirect('/login.html?error=Please login to access your account');
+        return;
+    }
+});
+
 // Route to handle form submission
 app.post('/project', upload.single('upload-file'), async (req, res) => {
+    const enrollment = req.session.username;
+    if (!enrollment) {
+        res.redirect('/login.html?error=Please login to access your account');
+        return;
+    }
     try {
         // Extract form data
         const { studentName, studentErNo, branch, projectTitle, projectDescription, additionalComments } = req.body;
@@ -118,15 +131,15 @@ app.post('/project', upload.single('upload-file'), async (req, res) => {
 
 // Route to handle account page
 app.get('/account', async (req, res) => {
-    const enrollment = req.session.credential;
+    const enrollment = req.session.username;
     if (!enrollment) {
-        res.redirect('/?error=Please login to access your account');
+        res.redirect('/login.html?error=Please login to access your account');
         return;
     }
 
     try {
         // Query the database to retrieve student information based on enrollment
-        const query = 'SELECT student_name, enrollment, class, batch, cp_guide_name, project_title, email_id, attendance FROM students WHERE enrollment = $1';
+        const query = 'SELECT student_name, enrollment, class, batch, email_id FROM students WHERE enrollment = $1';
         const result = await client.query(query, [enrollment]);
 
         if (result.rows.length > 0) {
@@ -135,21 +148,36 @@ app.get('/account', async (req, res) => {
             const studentInfo = result.rows[0]; // Assuming only one row per user
 
             // Inject student information into the HTML file
+            accountHtml = accountHtml.replace('{{student}}', studentInfo.student_name);
             accountHtml = accountHtml.replace('{{studentName}}', studentInfo.student_name);
             accountHtml = accountHtml.replace('{{enrollment}}', studentInfo.enrollment);
             accountHtml = accountHtml.replace('{{class}}', studentInfo.class);
             accountHtml = accountHtml.replace('{{batch}}', studentInfo.batch);
-            accountHtml = accountHtml.replace('{{cpIIGuideName}}', studentInfo.cp_guide_name);
-            accountHtml = accountHtml.replace('{{projectTitle}}', studentInfo.project_title);
             accountHtml = accountHtml.replace('{{emailId}}', studentInfo.email_id);
-            accountHtml = accountHtml.replace('{{attendance}}', studentInfo.attendance);
-            // Add more replacements as needed for other student information
 
             // Send the modified HTML file
             res.send(accountHtml);
         } else {
             res.status(404).send('Student information not found');
         }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
+app.get('/logout',  function (req, res, next)  {
+    try {
+        if (req.session) {
+            // delete session object
+            req.session.destroy(function (err) {
+              if (err) {
+                return next(err);
+              } else {
+                return res.redirect('/');
+              }
+            });
+          }
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal server error');

@@ -24,6 +24,7 @@
             color: #ff7920; 
             border-bottom: 2px solid #ff7920; 
         }
+        
 
         nav {
             display: flex;
@@ -125,7 +126,28 @@
 
         .button2:hover {
             transform: scale(1.1);
-        }
+        } 
+        .signin-btn a {
+    color: black;
+    text-decoration: none; 
+}
+
+.signin-btn:hover a {
+    color: #fff; 
+}
+.signin-btn {
+    background-color: #47c8ff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 30px;
+    cursor: pointer;
+    border-radius: 20px; 
+    transition: background-color 0.3s ease; 
+}
+
+.signin-btn:hover {
+    background-color: #ff7920;
+}
     </style>
 </head>
 <body>
@@ -136,10 +158,10 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;<h1>Capstone Portal</h1> 
             </div>
             <div class="menu">
-                <a href="#">Home</a>
+                <a href="/welcomePage.html">Home</a>
                 <a href="#">About</a>
-                <a href="projectUpload.html">Project</a>
-                <button class="signin-btn"> <a href="login.html">Login</a> </button>
+                <a href="/project">Project</a>
+                <button class="signin-btn"><a href="login.html" >Login</a></button>
             </div>
         </nav>
     </header>
@@ -152,7 +174,7 @@
             <h3 align="center">Empower your project journey effortlessly! <br>
                 Our intuitive Project Management System provides a seamless platform 
                 for you to add and track your project details with ease.</h3>
-            <button class="button2">Get Started</button>
+            <button class="button2"><a href="login.html">Get Started</a></button>
             <div class="left-column-text">
                 <br>
                 <br>
