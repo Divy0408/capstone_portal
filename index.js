@@ -166,6 +166,43 @@ app.get('/account', async (req, res) => {
     }
 });
 
+// Route to handle viewProject page
+app.get('/viewProject', async (req, res) => {
+    const enrollment = req.session.username;
+    if (!enrollment) {
+        res.redirect('/login.html?error=Please login to access your account');
+        return;
+    }
+
+    try {
+        // Query the database to retrieve student information based on enrollment
+        const query = 'SELECT student_name, enrollment, branch, project_title, project_description, additional_comments FROM projects WHERE enrollment = $1';
+        const result = await client.query(query, [enrollment]);
+
+        if (result.rows.length > 0) {
+            // Render the account.html file with student information injected
+            let accountHtml = fs.readFileSync(__dirname + '/viewProject.html', 'utf8');
+            const studentInfo = result.rows[0]; // Assuming only one row per user
+
+            // Inject student information into the HTML file
+            accountHtml = accountHtml.replace('{{studentName}}', studentInfo.student_name);
+            accountHtml = accountHtml.replace('{{enrollment}}', studentInfo.enrollment);
+            accountHtml = accountHtml.replace('{{branch}}', studentInfo.branch);
+            accountHtml = accountHtml.replace('{{project_title}}', studentInfo.project_title);
+            accountHtml = accountHtml.replace('{{project_description}}', studentInfo.project_description);
+            accountHtml = accountHtml.replace('{{additional_comments}}', studentInfo.additional_comments);
+
+            // Send the modified HTML file
+            res.send(accountHtml);
+        } else {
+            res.status(404).send('Project information not found');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
 app.get('/logout',  function (req, res, next)  {
     try {
         if (req.session) {
