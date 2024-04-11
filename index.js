@@ -204,18 +204,23 @@ app.get('/viewProject', async (req, res) => {
     }
 });
 
-app.get('/logout',  function (req, res, next)  {
+// Route to handle logout
+app.get('/logout', function (req, res) {
     try {
         if (req.session) {
-            // delete session object
+            // Destroy session
             req.session.destroy(function (err) {
-              if (err) {
-                return next(err);
-              } else {
-                return res.redirect('/');
-              }
+                if (err) {
+                    console.error('Error destroying session:', err);
+                    res.status(500).send('Internal server error');
+                } else {
+                    // Clear browser history and redirect to login page
+                    res.redirect('/login.html');
+                }
             });
-          }
+        } else {
+            res.redirect('/login.html');
+        }
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal server error');
