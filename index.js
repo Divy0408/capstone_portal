@@ -54,7 +54,7 @@ app.post('/login', async (req, res) => {
         query = 'SELECT * FROM students WHERE enrollment = $1 AND password = $2';
         }
         else if (isEmail(username)){
-            query = 'SELECT * FROM faculty WHERE email = $1 AND password = $2';
+            query = 'SELECT * FROM coordinator WHERE email = $1 AND password = $2';
         }
         else{
             res.redirect('/?error=Invalid input format');
@@ -71,7 +71,7 @@ app.post('/login', async (req, res) => {
             }
             else if (isEmail(username)) {
                 req.session.username = username;
-                res.redirect('/home.html');
+                res.redirect('/coordinator.html');
             }
         } else {
             // Invalid credentials, redirect back to login page with error message
