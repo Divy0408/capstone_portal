@@ -176,7 +176,7 @@ app.get('/viewProject', async (req, res) => {
 
     try {
         // Query the database to retrieve student information based on enrollment
-        const query = 'SELECT id, student_name, enrollment, branch, project_title, project_description, additional_comments FROM projects WHERE enrollment = $1';
+        const query = 'SELECT team_id, student_name, enrollment, branch, project_title, project_description, additional_comments FROM projects WHERE enrollment = $1';
         const result = await client.query(query, [enrollment]);
 
         if (result.rows.length > 0) {
@@ -185,7 +185,7 @@ app.get('/viewProject', async (req, res) => {
             const studentInfo = result.rows[0]; // Assuming only one row per user
 
             // Inject student information into the HTML file
-            accountHtml = accountHtml.replace('{{studentId}}', studentInfo.id);
+            accountHtml = accountHtml.replace('{{teamId}}', studentInfo.team_id);
             accountHtml = accountHtml.replace('{{studentName}}', studentInfo.student_name);
             accountHtml = accountHtml.replace('{{enrollment}}', studentInfo.enrollment);
             accountHtml = accountHtml.replace('{{branch}}', studentInfo.branch);
