@@ -27,12 +27,6 @@ const upload = multer({ dest: 'uploads/' }); // Set destination folder for file 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Express session middleware
-app.use(session({
-    secret: 'capstone_portal_2024_secret_key',
-    resave: false,
-    saveUninitialized: true
-}));
 
 // Serve static files (HTML, CSS, etc.)
 app.use(express.static(__dirname));
