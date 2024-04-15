@@ -65,13 +65,13 @@ app.post('/login', async (req, res) => {
         const result = await client.query(query, [username, password]);
 
         if (result.rows.length > 0) {
-             // User authenticated, redirect to home page
-             if (isEnrollmentNumber(username)) {
-                req.session.username = username;
+             // User authenticated, redirect to appropriate page based on role
+            const user = result.rows[0];
+            if (isEnrollmentNumber(username)) {
+                req.session.student = user; // Store student information in session
                 res.redirect('/home.html');
-            }
-            else if (isEmail(username)) {
-                req.session.username = username;
+            } else if (isEmail(username)) {
+                req.session.coordinator = user; // Store coordinator information in session
                 res.redirect('/coordinator.html');
             }
         } else {
@@ -98,8 +98,8 @@ function isEmail(input) {
 
 
 app.get('/project', async(req, res) => {
-    const enrollment = req.session.username;
-    if (!enrollment) {
+    const student = req.session.student;
+    if (!student) {
         res.redirect('/login.html?error=Please login to access your account');
         return;
     }
@@ -107,8 +107,8 @@ app.get('/project', async(req, res) => {
 
 // Route to handle form submission
 app.post('/project', upload.single('upload-file'), async (req, res) => {
-    const enrollment = req.session.username;
-    if (!enrollment) {
+    const student = req.session.student;
+    if (!student) {
         res.redirect('/login.html?error=Please login to access your account');
         return;
     }
@@ -133,13 +133,14 @@ app.post('/project', upload.single('upload-file'), async (req, res) => {
 
 // Route to handle account page
 app.get('/account', async (req, res) => {
-    const enrollment = req.session.username;
-    if (!enrollment) {
+    const student = req.session.student;
+    if (!student) {
         res.redirect('/login.html?error=Please login to access your account');
         return;
     }
 
     try {
+        const enrollment = student.enrollment;
         // Query the database to retrieve student information based on enrollment
         const query = 'SELECT student_name, enrollment, class, batch, email_id FROM students WHERE enrollment = $1';
         const result = await client.query(query, [enrollment]);
@@ -170,13 +171,14 @@ app.get('/account', async (req, res) => {
 
 // Route to handle viewProject page
 app.get('/viewProject', async (req, res) => {
-    const enrollment = req.session.username;
-    if (!enrollment) {
+    const student = req.session.student;
+    if (!student) {
         res.redirect('/login.html?error=Please login to access your account');
         return;
     }
 
     try {
+        const enrollment = student.enrollment;
         // Query the database to retrieve student information based on enrollment
         const query = 'SELECT team_id, student_name, enrollment, branch, project_title, project_description, additional_comments FROM projects WHERE enrollment = $1';
         const result = await client.query(query, [enrollment]);
@@ -208,8 +210,8 @@ app.get('/viewProject', async (req, res) => {
 
 // Route to handle coordinator
 app.get('/register', async(req, res) => {
-    const email = req.session.username;
-    if (!email) {
+    const coordinator = req.session.coordinator;
+    if (!coordinator) {
         res.redirect('/register.html');
         return;
     }
@@ -218,8 +220,19 @@ app.get('/register', async(req, res) => {
 // Route to handle logout
 app.get('/logout', function (req, res) {
     try {
-        if (req.session) {
-            // Destroy session
+        if (req.session.student) {
+            // Destroy student session if exists
+            req.session.destroy(function (err) {
+                if (err) {
+                    console.error('Error destroying session:', err);
+                    res.status(500).send('Internal server error');
+                } else {
+                    // Clear browser history and redirect to login page
+                    res.redirect('/login.html');
+                }
+            });
+        } else if (req.session.coordinator) {
+            // Destroy coordinator session if exists
             req.session.destroy(function (err) {
                 if (err) {
                     console.error('Error destroying session:', err);
@@ -230,6 +243,7 @@ app.get('/logout', function (req, res) {
                 }
             });
         } else {
+            // No active session found, redirect to login page
             res.redirect('/login.html');
         }
     } catch (error) {
