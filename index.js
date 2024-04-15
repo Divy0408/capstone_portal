@@ -27,6 +27,12 @@ const upload = multer({ dest: 'uploads/' }); // Set destination folder for file 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Express session middleware
+app.use(session({
+    secret: 'capstone_portal_2024_secret_key',
+    resave: false,
+    saveUninitialized: true
+}));
 
 // Serve static files (HTML, CSS, etc.)
 app.use(express.static(__dirname));
@@ -38,23 +44,6 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/welcomePage.html', { error: errorMessage });
 });
 
-// Middleware to check user role
-function checkRole(role) {
-    return (req, res, next) => {
-        const username = req.session.username;
-        if (username) {
-            // Assuming you have a way to determine the role of the user
-            const userRole = getUserRole(username); // Implement this function
-            if (userRole === role) {
-                next(); // User is authorized, continue to the next middleware or route handler
-            } else {
-                res.status(403).send('Forbidden'); // User is not authorized to access this resource
-            }
-        } else {
-            res.redirect('/login.html?error=Please login to access your account');
-        }
-    };
-}
 
 // Route to handle login form submission
 app.post('/login', async (req, res) => {
@@ -76,8 +65,8 @@ app.post('/login', async (req, res) => {
         const result = await client.query(query, [username, password]);
 
         if (result.rows.length > 0) {
-            // User authenticated, redirect to home page
-            if (isEnrollmentNumber(username)) {
+             // User authenticated, redirect to home page
+             if (isEnrollmentNumber(username)) {
                 req.session.username = username;
                 res.redirect('/home.html');
             }
@@ -107,18 +96,8 @@ function isEmail(input) {
     return /\S+@ganpatuniversity\.ac\.in$/.test(input);
 }
 
-// Function to get user role based on username format
-function getUserRole(username) {
-    if (isEnrollmentNumber(username)){
-        return 'student';
-    } else if (isEmail(username)){
-        return 'coordinator';
-    } else {
-        return null; // Unable to determine role
-    }
-}
 
-app.get('/project', checkRole('student'), async(req, res) => {
+app.get('/project', async(req, res) => {
     const enrollment = req.session.username;
     if (!enrollment) {
         res.redirect('/login.html?error=Please login to access your account');
@@ -127,7 +106,7 @@ app.get('/project', checkRole('student'), async(req, res) => {
 });
 
 // Route to handle form submission
-app.post('/project', checkRole('student'), upload.single('upload-file'), async (req, res) => {
+app.post('/project', upload.single('upload-file'), async (req, res) => {
     const enrollment = req.session.username;
     if (!enrollment) {
         res.redirect('/login.html?error=Please login to access your account');
@@ -153,7 +132,7 @@ app.post('/project', checkRole('student'), upload.single('upload-file'), async (
 });
 
 // Route to handle account page
-app.get('/account', checkRole('student'), async (req, res) => {
+app.get('/account', async (req, res) => {
     const enrollment = req.session.username;
     if (!enrollment) {
         res.redirect('/login.html?error=Please login to access your account');
@@ -190,7 +169,7 @@ app.get('/account', checkRole('student'), async (req, res) => {
 });
 
 // Route to handle viewProject page
-app.get('/viewProject', checkRole('student'), async (req, res) => {
+app.get('/viewProject', async (req, res) => {
     const enrollment = req.session.username;
     if (!enrollment) {
         res.redirect('/login.html?error=Please login to access your account');
@@ -228,7 +207,7 @@ app.get('/viewProject', checkRole('student'), async (req, res) => {
 });
 
 // Route to handle coordinator
-app.get('/register', checkRole('coordinator'), async(req, res) => {
+app.get('/register', async(req, res) => {
     const email = req.session.username;
     if (!email) {
         res.redirect('/register.html');
