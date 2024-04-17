@@ -45,6 +45,45 @@ app.get('/', (req, res) => {
 });
 
 
+// // Route to handle login form submission
+// app.post('/login', async (req, res) => {
+//     const { username, password } = req.body;
+
+//     try {
+//         let query;
+//         if (isEnrollmentNumber(username)){
+//         query = 'SELECT * FROM students WHERE enrollment = $1 AND password = $2';
+//         }
+//         else if (isEmail(username)){
+//             query = 'SELECT * FROM coordinator WHERE email = $1 AND password = $2';
+//         }
+//         else{
+//             res.redirect('/?error=Invalid input format');
+//             return;
+//         }
+
+//         const result = await client.query(query, [username, password]);
+
+//         if (result.rows.length > 0) {
+//              // User authenticated, redirect to appropriate page based on role
+//             const user = result.rows[0];
+//             if (isEnrollmentNumber(username)) {
+//                 req.session.student = user; // Store student information in session
+//                 res.redirect('/home.html');
+//             } else if (isEmail(username)) {
+//                 req.session.coordinator = user; // Store coordinator information in session
+//                 res.redirect('/coordinator.html');
+//             }
+//         } else {
+//             // Invalid credentials, redirect back to login page with error message
+//             res.redirect('/?error=Invalid Credentials');
+//         }
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).send('Internal server error');
+//     }
+// });
+
 // Route to handle login form submission
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -52,35 +91,109 @@ app.post('/login', async (req, res) => {
     try {
         let query;
         if (isEnrollmentNumber(username)){
-        query = 'SELECT * FROM students WHERE enrollment = $1 AND password = $2';
-        }
-        else if (isEmail(username)){
-            query = 'SELECT * FROM coordinator WHERE email = $1 AND password = $2';
-        }
-        else{
+            query = 'SELECT * FROM students WHERE enrollment = $1';
+        } else if (isEmail(username)){
+            query = 'SELECT * FROM coordinator WHERE email = $1';
+        } else {
             res.redirect('/?error=Invalid input format');
             return;
         }
 
-        const result = await client.query(query, [username, password]);
+        const result = await client.query(query, [username]);
 
         if (result.rows.length > 0) {
-             // User authenticated, redirect to appropriate page based on role
             const user = result.rows[0];
-            if (isEnrollmentNumber(username)) {
-                req.session.student = user; // Store student information in session
-                res.redirect('/home.html');
-            } else if (isEmail(username)) {
-                req.session.coordinator = user; // Store coordinator information in session
-                res.redirect('/coordinator.html');
+            if (password === user.password) {
+                // Password is correct
+                if (isEnrollmentNumber(username)) {
+                    // Check if the password matches the enrollment number
+                    if (password === username) {
+                        // Password matches the enrollment number, redirect to change password page
+                        req.session.student = user;
+                        res.redirect('/change-password');
+                        return;
+                    }
+                }
+                // Proceed with regular login
+                if (isEnrollmentNumber(username)) {
+                    req.session.student = user;
+                    res.redirect('/home.html');
+                } else {
+                    req.session.coordinator = user;
+                    res.redirect('/coordinator.html');
+                }
+            } else {
+                // Incorrect password, redirect back to login page with error message
+                res.redirect('/login.html?error=Incorrect password');
             }
         } else {
-            // Invalid credentials, redirect back to login page with error message
-            res.redirect('/?error=Invalid Credentials');
+            // User not found, redirect back to login page with error message
+            res.redirect('/login.html?error=Invalid Credentials');
         }
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal server error');
+    }
+});
+
+// Route to handle change password page
+app.get('/change-password', async (req, res) => {
+    const student = req.session.student;
+    if (!student) {
+        res.redirect('/login.html?error=Please login to access your account');
+        return;
+    }
+
+    if (isEnrollmentNumber(student.enrollment)) {
+        res.sendFile(__dirname + '/changePassword.html');
+    } else {
+        res.redirect('/home.html'); // Redirect coordinators away from this page
+    }
+});
+
+// Route to handle password change submission
+app.post('/change-password', async (req, res) => {
+    const student = req.session.student;
+    if (!student) {
+        res.redirect('/login.html?error=Please login to access your account');
+        return;
+    }
+
+    if (isEnrollmentNumber(student.enrollment)) {
+        try {
+            const { oldPassword, newPassword } = req.body;
+
+            // Check if the old password matches the one stored in the database
+            const query = 'SELECT password FROM students WHERE enrollment = $1';
+            const result = await client.query(query, [student.enrollment]);
+
+            if (result.rows.length === 0) {
+                res.status(404).send('Student not found');
+                return;
+            }
+
+            const storedPassword = result.rows[0].password;
+            if (oldPassword !== storedPassword) {
+                res.status(401).send('Invalid old password');
+                return;
+            }
+
+            // Update the password in the database
+            const updateQuery = 'UPDATE students SET password = $1 WHERE enrollment = $2';
+            await client.query(updateQuery, [newPassword, student.enrollment]);
+
+            //Update session data with latest user information
+            student.password = newPassword;
+            req.session.student = student;
+
+            // Redirect to home page or account page after successful password change
+            res.redirect('/home.html');
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).send('Internal server error');
+        }
+    } else {
+        res.redirect('/home.html'); // Redirect coordinators away from this page
     }
 });
 

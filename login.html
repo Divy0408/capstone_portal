@@ -122,7 +122,13 @@
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 100%;
+            width: calc(100% - 30px); /* Adjusted width to accommodate image */
+            margin-right: 10px; /* Added margin to separate input and image */
+        }
+
+        .password-toggle {
+            margin-bottom: 20px;
+            cursor: pointer;
         }
 
         .login-form input[type="submit"] {
@@ -172,7 +178,10 @@
                         <label for="username">Username:</label>
                         <input type="text" id="username" name="username" required>
                         <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" required>
+                        <div style="display: flex; align-items: center;">
+                            <input type="password" id="password" name="password" required>
+                            <img class="password-toggle" src="eye-closed.png" alt="Show Password" width="20" height="20">
+                        </div>
                         <input type="submit" value="Login">
                     </form>
                 </div>
@@ -182,5 +191,20 @@
             <img class="homeimage" src="login.png" alt="Image">
         </div>
     </div>
+
+    <script>
+        var passwordInput = document.getElementById('password');
+        var passwordToggle = document.querySelector('.password-toggle');
+        var isPasswordVisible = false;
+
+        passwordToggle.addEventListener('click', function() {
+            isPasswordVisible = !isPasswordVisible;
+            var type = isPasswordVisible ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            var iconSrc = isPasswordVisible ? 'eye-open.png' : 'eye-closed.png';
+            passwordToggle.setAttribute('src', iconSrc);
+        });
+    </script>
+
 </body>
 </html>
