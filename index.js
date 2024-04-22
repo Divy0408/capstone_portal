@@ -499,15 +499,6 @@ app.get('/viewProject', async (req, res) => {
     }
 });
 
-// Route to handle coordinator
-app.get('/register', async(req, res) => {
-    const coordinator = req.session.coordinator;
-    if (!coordinator) {
-        res.redirect('/register.html');
-        return;
-    }
-});
-
 // Route to handle logout
 app.get('/logout', function (req, res) {
     try {
