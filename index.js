@@ -46,6 +46,54 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/welcomePage.html', { error: errorMessage });
 });
 
+app.get('/register', async (req, res) => {
+    res.sendFile(__dirname + '/registration.html');
+});
+
+// Route to handle form submission of Registration
+app.post('/register', async (req, res) => {
+    try {
+        
+        // Extract and store team members data
+        for (let i = 1; i <= 4; i++) {
+            const enrollment = req.body[`member-enrollment-${i}`];
+            const password = req.body[`member-enrollment-${i}`];
+            const student_name = req.body[`member-name-${i}`];
+            const class_name = req.body[`member-class-${i}`];
+            const batch = req.body[`member-batch-${i}`];
+            const email_id = req.body[`member-email-${i}`];
+            const branch = req.body[`member-branch-${i}`];
+            const semester = req.body[`semester-${i}`];
+
+            // Check if any required field is null or undefined
+            if (!enrollment || !password || !student_name || !class_name || !batch || !email_id || !branch || !semester) {
+                console.error(`Some required fields are missing for team member ${i}`);
+                continue; // Skip this iteration if any required field is missing
+            }
+
+            // Insert or update member data into the database
+            await client.query(
+                'INSERT INTO students (enrollment, password, student_name, class, batch, email_id, branch, semester) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ' +
+                'ON CONFLICT (enrollment) DO UPDATE SET ' +
+                'password = EXCLUDED.password, ' +
+                'student_name = EXCLUDED.student_name, ' +
+                'class = EXCLUDED.class, ' +
+                'batch = EXCLUDED.batch, ' +
+                'email_id = EXCLUDED.email_id, ' +
+                'branch = EXCLUDED.branch, ' +
+                'semester = EXCLUDED.semester',
+                [enrollment, password, student_name, class_name, batch, email_id, branch, semester]
+            );
+        }
+
+        // Send a success response
+        res.status(200).send('Registration successful into Capstone Portal.');
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
 // Route to handle login form submission
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -343,7 +391,7 @@ app.get('/project', async(req, res) => {
     }
 });
 
-// Route to handle form submission
+// Route to handle form submission of project
 app.post('/project', upload.single('upload-file'), async (req, res) => {
     const student = req.session.student;
     if (!student) {
