@@ -53,6 +53,9 @@ app.get('/register', async (req, res) => {
 // Route to handle form submission of Registration
 app.post('/register', async (req, res) => {
     try {
+
+        // Generate a random team_id within the range of 1 to 100
+        const team_id = Math.floor(Math.random() * 100) + 1;
         
         // Extract and store team members data
         for (let i = 1; i <= 4; i++) {
@@ -71,19 +74,19 @@ app.post('/register', async (req, res) => {
                 continue; // Skip this iteration if any required field is missing
             }
 
+            // Check if the student with the provided enrollment number already exists
+            const existingStudent = await client.query('SELECT * FROM students WHERE enrollment = $1', [enrollment]);
+            if (existingStudent.rows.length > 0) {
+                res.send(`Student with enrollment number ${enrollment} already exists`);
+                continue; // Skip registration for this team member
+            }
+
             // Insert or update member data into the database
             await client.query(
-                'INSERT INTO students (enrollment, password, student_name, class, batch, email_id, branch, semester) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ' +
-                'ON CONFLICT (enrollment) DO UPDATE SET ' +
-                'password = EXCLUDED.password, ' +
-                'student_name = EXCLUDED.student_name, ' +
-                'class = EXCLUDED.class, ' +
-                'batch = EXCLUDED.batch, ' +
-                'email_id = EXCLUDED.email_id, ' +
-                'branch = EXCLUDED.branch, ' +
-                'semester = EXCLUDED.semester',
-                [enrollment, password, student_name, class_name, batch, email_id, branch, semester]
+                'INSERT INTO students (enrollment, password, student_name, class, batch, email_id, branch, semester, team_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+                [enrollment, password, student_name, class_name, batch, email_id, branch, semester, team_id]
             );
+
         }
 
         // Send a success response
