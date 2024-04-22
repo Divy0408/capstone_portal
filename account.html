@@ -150,9 +150,11 @@
     <div id="studentInfo">
         <p>Name: <span id="studentName"></span></p>
         <p>Enrollment: <span id="enrollment"></span></p>
+        <p>Email ID: <span id="emailId"></span></p>
+        <p>Branch: <span id="branch"></span></p>
+        <p>Semester: <span id="semester"></span>th</p>
         <p>Class: <span id="class"></span></p>
         <p>Batch: <span id="batch"></span></p>
-        <p>Email ID: <span id="emailId"></span></p>
     </div>
 
     <script>
@@ -163,6 +165,8 @@
         document.getElementById('class').innerText = '{{class}}';
         document.getElementById('batch').innerText = '{{batch}}';
         document.getElementById('emailId').innerText = '{{emailId}}';
+        document.getElementById('branch').innerText = '{{branch}}';
+        document.getElementById('semester').innerText = '{{semester}}';
     </script>
 </body>
 </html>

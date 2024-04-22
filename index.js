@@ -428,7 +428,7 @@ app.get('/account', async (req, res) => {
     try {
         const enrollment = student.enrollment;
         // Query the database to retrieve student information based on enrollment
-        const query = 'SELECT student_name, enrollment, class, batch, email_id FROM students WHERE enrollment = $1';
+        const query = 'SELECT student_name, enrollment, class, batch, email_id, branch, semester FROM students WHERE enrollment = $1';
         const result = await client.query(query, [enrollment]);
 
         if (result.rows.length > 0) {
@@ -443,6 +443,8 @@ app.get('/account', async (req, res) => {
             accountHtml = accountHtml.replace('{{class}}', studentInfo.class);
             accountHtml = accountHtml.replace('{{batch}}', studentInfo.batch);
             accountHtml = accountHtml.replace('{{emailId}}', studentInfo.email_id);
+            accountHtml = accountHtml.replace('{{branch}}', studentInfo.branch);
+            accountHtml = accountHtml.replace('{{semester}}', studentInfo.semester);
 
             // Send the modified HTML file
             res.send(accountHtml);
