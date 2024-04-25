@@ -43,7 +43,7 @@ app.use(express.static(__dirname));
 app.get('/', (req, res) => {
     // Check for error message in URL query parameters
     const errorMessage = req.query.error ? req.query.error : '';
-    res.sendFile(__dirname + '/welcomePage.html', { error: errorMessage });
+    res.sendFile(__dirname + '/index.html', { error: errorMessage });
 });
 
 app.get('/register', async (req, res) => {
