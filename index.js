@@ -534,6 +534,33 @@ app.get('/notifications', async (req, res) => {
     }
 });
 
+// Route to handle fetching list of team-ids for students
+app.get('/team-ids', async (req, res) => {
+    try {
+        const query = 'SELECT DISTINCT team_id FROM students'; // Modify the query according to your database schema
+        const result = await client.query(query);
+        const teamIds = result.rows.map(row => row.team_id);
+        res.json(teamIds);
+    } catch (error) {
+        console.error('Error fetching team IDs:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
+// Route to handle fetching team-details of students
+app.get('/team-details/:teamId', async (req, res) => {
+    const teamId = req.params.teamId;
+    try {
+        const query = 'SELECT * FROM students WHERE team_id = $1'; // Modify the query according to your database schema
+        const result = await client.query(query, [teamId]);
+        const teamDetails = result.rows;
+        res.json(teamDetails);
+    } catch (error) {
+        console.error('Error fetching team details:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
 // Route to handle logout
 app.get('/logout', function (req, res) {
     try {

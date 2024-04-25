@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>coordinator Dashboard</title>
+    <title>Coordinator Dashboard</title>
     <link rel="icon" href="logo1.png">
     <style>
         body {
             margin: 0;
-            font-style: Condensed;
+            font-family: Arial, sans-serif;
             font-weight: 600;
+            background-color: #f4f4f4;
         }
 
         header {
@@ -76,103 +77,53 @@
         }
 
         .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 2px auto;
-            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         
-        .left-column {
-            flex: 1;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
         }
-
-        .left-column-name {
-            margin-bottom: 10px;
-        }
-
-        .left-column-name h1 {
-            font-size: 46px;
-            letter-spacing: 2px;
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
             margin: 0;
         }
-
-        .right-column {
-            flex: 1;
-            padding: 10px;
-            position: relative;
-        }
-
-        .homeimage {
-            width: 95%; 
-        }
-
-        .button2 {
-            background-color: #47c8ff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 30px;
+        
+        li {
             cursor: pointer;
-            border-radius: 20px; 
-            transition: background-color 0.3s ease;
-            background-image: linear-gradient(to right, #47c8ff, #ffa66a);
-            transition: transform 0.3s ease; 
-        }
-
-        .button2:hover {
-            transform: scale(1.1);
-        } 
-        .logout-btn a {
-    color: black;
-    text-decoration: none; 
-}
-
-.logout-btn:hover a {
-    color: #fff; 
-}
-.logout-btn {
-    background-color: #47c8ff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 30px;
-    cursor: pointer;
-    border-radius: 20px; 
-    transition: background-color 0.3s ease; 
-}
-
-.logout-btn:hover {
-    background-color: #ff7920;
-}
-.dropdown-content {
-            display: none;
-            position: absolute;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
             background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
         }
-
-        /* Style for the dropdown options */
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
+        
+        li:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .team-details {
+            display: none;
+            padding-top: 20px;
+        }
+        
+        .team-details.visible {
             display: block;
         }
-
-        /* Change color on hover */
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-
-        /* Show the dropdown content when hovering over the parent */
-        .dropdown:hover .dropdown-content {
-            display: block;
+        
+        .team-member {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
         }
     </style>
 </head>
@@ -193,22 +144,76 @@
         </nav>
     </header>
     <div class="container">
-        <div class="left-column">
-            <div class="left-column-name">
-                <h1 align="center"> Capstone Portal </h1>
-                <h1>Project Management System </h1>
-            </div>
-            <h3 align="center">Empower your project journey effortlessly! <br>
-                Our intuitive Project Management System provides a seamless platform 
-                for you to add and track your project details with ease.</h3>
-            <div class="left-column-text">
-                <br>
-                <br>
-            </div>            
-        </div>
-        <div class="right-column">
-            <image class="homeimage" src="homePageImage.png"></image>
-        </div>
+        <h2>Team IDs</h2>
+        <ul id="team-list">
+            <!-- Dynamically populate team IDs here using JavaScript -->
+        </ul>
+        <!-- Display team member details here when a team ID is selected -->
+        <div id="team-details-container" class="team-details"></div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to fetch team IDs from the backend and populate the list
+            function fetchTeamIDs() {
+                // Replace this fetch request with your actual backend endpoint to fetch team IDs
+                fetch('/team-ids')
+                    .then(response => response.json())
+                    .then(teamIDs => {
+                        const teamList = document.getElementById('team-list');
+                        // Clear any existing team IDs in the list
+                        teamList.innerHTML = '';
+                        // Populate the list with team IDs
+                        teamIDs.forEach(teamID => {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = teamID;
+                            // Add click event listener to each team ID to display details
+                            listItem.addEventListener('click', function() {
+                                // Call function to fetch and display team details when clicked
+                                fetchTeamDetails(teamID);
+                            });
+                            teamList.appendChild(listItem);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching team IDs:', error);
+                    });
+            }
+        
+            function fetchTeamDetails(teamId) {
+                fetch(`/team-details/${teamId}`)
+                    .then(response => response.json())
+                    .then(teamDetails => {
+                        const teamDetailsContainer = document.getElementById('team-details-container');
+                        teamDetailsContainer.innerHTML = '';
+        
+                        teamDetails.forEach(member => {
+                            const memberDiv = document.createElement('div');
+                            memberDiv.classList.add('team-member');
+                            memberDiv.innerHTML = `
+                                <h3>Team Member</h3>
+                                <p>Name: ${member.student_name}</p>
+                                <p>Enrollment Number: ${member.enrollment}</p>
+                                <p>Class: ${member.class}</p>
+                                <p>Batch: ${member.batch}</p>
+                                <p>Email: ${member.email_id}</p>
+                                <p>Branch: ${member.branch}</p>
+                                <p>Semester: ${member.semester}</p>
+                            `;
+                            teamDetailsContainer.appendChild(memberDiv);
+                        });
+        
+                        // Show the team details container
+                        teamDetailsContainer.classList.add('visible');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching team details:', error);
+                    });
+            }
+
+            fetchTeamIDs();
+        });
+    </script>
+
 </body>
 </html>
