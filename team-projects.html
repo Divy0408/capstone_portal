@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coordinator Dashboard</title>
+    <title>Projects</title>
     <link rel="icon" href="logo1.png">
     <style>
         body {
@@ -12,70 +12,6 @@
             font-weight: 600;
             background-color: #f4f4f4;
         }
-
-        header {
-            background-color: #d8d8d8;
-            color: #000000;
-            padding: 20px 0;
-            border-bottom: 2px solid #47c8ff; 
-        }
-
-        .menu a:hover,
-        .menu a:focus {
-            color: #ff7920; 
-            border-bottom: 2px solid #ff7920; 
-        }
-        
-
-        nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo img {
-            display: block;
-            margin-right: 10px; 
-        }
-
-        .logo h1 {
-            font-size: 40px;
-            margin: 0;
-            font-family: 'Bebas Neue', sans-serif; 
-            color: #47c8ff; 
-        }
-
-        .menu a {
-            color: #000000;
-            text-decoration: none;
-            margin-right: 20px;
-            font-size: 30px;
-            transition: color 0.3s ease; 
-        }
-
-        .logout-btn {
-            background-color: #47c8ff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 30px;
-            cursor: pointer;
-            border-radius: 20px; 
-            transition: background-color 0.3s ease; 
-        }
-
-        .logout-btn:hover {
-            background-color: #ff7920;
-        }
-
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -84,7 +20,6 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        
         h2 {
             text-align: center;
             margin-bottom: 20px;
@@ -128,21 +63,6 @@
     </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">
-                <img src="logo1.png" alt="Capstone Portal Logo" width="120" height="120">
-                &nbsp;&nbsp;&nbsp;&nbsp;<h1>Capstone Portal</h1> 
-            </div>
-            <div class="menu">
-                <a href="/coordinator.html">Dashboard</a>
-                <a href="/sendNotification.html">Notification</a>
-                <a href="/team-projects.html">View Projects</a>
-                <a href="/guideAllocate.html">Guide Allocation</a>
-                <button class="logout-btn"><a href="/logout">Log Out</a></button>
-            </div>
-        </nav>
-    </header>
     <div class="container">
         <h2>Team IDs</h2>
         <ul id="team-list">
@@ -156,8 +76,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Function to fetch team IDs from the backend and populate the list
             function fetchTeamIDs() {
-                // Replace this fetch request with your actual backend endpoint to fetch team IDs
-                fetch('/team-ids')
+                fetch('/team-ids-project')
                     .then(response => response.json())
                     .then(teamIDs => {
                         const teamList = document.getElementById('team-list');
@@ -181,25 +100,26 @@
             }
         
             function fetchTeamDetails(teamId) {
-                fetch(`/team-details/${teamId}`)
+                fetch(`/team-projects/${teamId}`)
                     .then(response => response.json())
                     .then(teamDetails => {
                         const teamDetailsContainer = document.getElementById('team-details-container');
                         teamDetailsContainer.innerHTML = '';
         
-                        teamDetails.forEach(member => {
+                        teamDetails.forEach(detail => {
                             const memberDiv = document.createElement('div');
                             memberDiv.classList.add('team-member');
                             memberDiv.innerHTML = `
-                                <h3>Team Member</h3>
-                                <p>Name: ${member.student_name}</p>
-                                <p>Enrollment Number: ${member.enrollment}</p>
-                                <p>Class: ${member.class}</p>
-                                <p>Batch: ${member.batch}</p>
-                                <p>Email: ${member.email_id}</p>
-                                <p>Branch: ${member.branch}</p>
-                                <p>Semester: ${member.semester}</p>
-                            `;
+                                <h2>Team Details</h2>
+                                <ul>
+                                    <li>Team ID: ${detail.team_id}</li>
+                                    <li>Student Name: ${detail.student_name}</li>
+                                    <li>Enrollment: ${detail.enrollment}</li>
+                                    <li>Branch: ${detail.branch}</li>
+                                    <li>Project Title: ${detail.project_title}</li>
+                                    <li>Project Description: ${detail.project_description}</li>
+                                    <li>Additional Comments: ${detail.additional_comments}</li>
+                                </ul>`;
                             teamDetailsContainer.appendChild(memberDiv);
                         });
         
@@ -214,6 +134,5 @@
             fetchTeamIDs();
         });
     </script>
-
 </body>
 </html>

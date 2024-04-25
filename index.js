@@ -431,7 +431,7 @@ app.get('/account', async (req, res) => {
     try {
         const enrollment = student.enrollment;
         // Query the database to retrieve student information based on enrollment
-        const query = 'SELECT student_name, enrollment, class, batch, email_id, branch, semester FROM students WHERE enrollment = $1';
+        const query = 'SELECT student_name, enrollment, class, batch, email_id, branch, semester, guide_name FROM students WHERE enrollment = $1';
         const result = await client.query(query, [enrollment]);
 
         if (result.rows.length > 0) {
@@ -448,6 +448,7 @@ app.get('/account', async (req, res) => {
             accountHtml = accountHtml.replace('{{emailId}}', studentInfo.email_id);
             accountHtml = accountHtml.replace('{{branch}}', studentInfo.branch);
             accountHtml = accountHtml.replace('{{semester}}', studentInfo.semester);
+            accountHtml = accountHtml.replace('{{guide}}', studentInfo.guide_name);
 
             // Send the modified HTML file
             res.send(accountHtml);
@@ -558,6 +559,60 @@ app.get('/team-details/:teamId', async (req, res) => {
     } catch (error) {
         console.error('Error fetching team details:', error);
         res.status(500).send('Internal server error');
+    }
+});
+
+// Route to handle fetching list of team-ids-project for students
+app.get('/team-ids-project', async (req, res) => {
+    try {
+        const query = 'SELECT DISTINCT team_id FROM projects'; // Modify the query according to your database schema
+        const result = await client.query(query);
+        const teamIds = result.rows.map(row => row.team_id);
+        res.json(teamIds);
+    } catch (error) {
+        console.error('Error fetching team IDs:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
+// Route to handle fetching team-project-details of students
+app.get('/team-projects/:teamId', async (req, res) => {
+    const teamId = req.params.teamId;
+    try {
+        const query = 'SELECT * FROM projects WHERE team_id = $1'; // Modify the query according to your database schema
+        const result = await client.query(query, [teamId]);
+        const teamDetails = result.rows;
+        res.json(teamDetails);
+    } catch (error) {
+        console.error('Error fetching team details:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
+// Route to fetch list of guides
+app.get('/guides', async (req, res) => {
+    try {
+        const query = 'SELECT name FROM guide'; // Adjust the query according to your database schema
+        const result = await client.query(query);
+        const guides = result.rows;
+        res.json(guides);
+    } catch (error) {
+        console.error('Error fetching guides:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Route to allocate guide to a team
+app.post('/allocate-guide/:teamId', async (req, res) => {
+    const teamId = req.params.teamId;
+    const { guide } = req.body;
+    try {
+        const query = 'UPDATE students SET guide_name = $1 WHERE team_id = $2'; // Adjust the query according to your database schema
+        await client.query(query, [guide, teamId]);
+        res.json({ message: `Guide ${guide} allocated to team ${teamId}` });
+    } catch (error) {
+        console.error('Error allocating guide:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
