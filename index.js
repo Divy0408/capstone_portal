@@ -499,6 +499,41 @@ app.get('/viewProject', async (req, res) => {
     }
 });
 
+// Route to handle sending notifications from coordinator to students
+app.post('/send-notification', async (req, res) => {
+    const { message } = req.body;
+
+    try {
+        // Get the current timestamp
+        const currentTime = new Date();
+
+        // Insert the notification into the database with the current timestamp
+        const query = 'INSERT INTO notifications (message, timestamp) VALUES ($1, $2)';
+        await client.query(query, [message, currentTime]);
+
+        // Send a success response
+        res.status(200).send('Notification sent successfully');
+    } catch (error) {
+        console.error('Error sending notification:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
+// Route to handle fetching notifications for students
+app.get('/notifications', async (req, res) => {
+    try {
+        // Query the database to retrieve all notifications sorted by timestamp in descending order
+        const query = 'SELECT message, timestamp FROM notifications ORDER BY timestamp DESC';
+        const result = await client.query(query);
+
+        // Send the notifications to the client
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching notifications:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
 // Route to handle logout
 app.get('/logout', function (req, res) {
     try {
