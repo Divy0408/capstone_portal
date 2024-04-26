@@ -130,7 +130,7 @@ app.post('/login', async (req, res) => {
                 // Proceed with regular login
                 if (isEnrollmentNumber(username)) {
                     req.session.student = user;
-                    res.redirect('/home.html');
+                    res.redirect('/home');
                 } else {
                     req.session.coordinator = user;
                     res.redirect('/coordinator.html');
@@ -420,8 +420,8 @@ app.post('/project', upload.single('upload-file'), async (req, res) => {
     }
 });
 
-// Route to handle account page
-app.get('/account', async (req, res) => {
+// Route to handle student info. page
+app.get('/home', async (req, res) => {
     const student = req.session.student;
     if (!student) {
         res.redirect('/login.html?error=Please login to access your account');
@@ -436,7 +436,7 @@ app.get('/account', async (req, res) => {
 
         if (result.rows.length > 0) {
             // Render the account.html file with student information injected
-            let accountHtml = fs.readFileSync(__dirname + '/account.html', 'utf8');
+            let accountHtml = fs.readFileSync(__dirname + '/home.html', 'utf8');
             const studentInfo = result.rows[0]; // Assuming only one row per user
 
             // Inject student information into the HTML file
