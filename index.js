@@ -461,45 +461,6 @@ app.get('/home', async (req, res) => {
     }
 });
 
-// Route to handle viewProject page
-app.get('/viewProject', async (req, res) => {
-    const student = req.session.student;
-    if (!student) {
-        res.redirect('/login.html?error=Please login to access your account');
-        return;
-    }
-
-    try {
-        const enrollment = student.enrollment;
-        // Query the database to retrieve student information based on enrollment
-        const query = 'SELECT team_id, student_name, enrollment, branch, project_title, project_description, additional_comments FROM projects WHERE enrollment = $1';
-        const result = await client.query(query, [enrollment]);
-
-        if (result.rows.length > 0) {
-            // Render the account.html file with student information injected
-            let accountHtml = fs.readFileSync(__dirname + '/viewProject.html', 'utf8');
-            const studentInfo = result.rows[0]; // Assuming only one row per user
-
-            // Inject student information into the HTML file
-            accountHtml = accountHtml.replace('{{teamId}}', studentInfo.team_id);
-            accountHtml = accountHtml.replace('{{studentName}}', studentInfo.student_name);
-            accountHtml = accountHtml.replace('{{enrollment}}', studentInfo.enrollment);
-            accountHtml = accountHtml.replace('{{branch}}', studentInfo.branch);
-            accountHtml = accountHtml.replace('{{project_title}}', studentInfo.project_title);
-            accountHtml = accountHtml.replace('{{project_description}}', studentInfo.project_description);
-            accountHtml = accountHtml.replace('{{additional_comments}}', studentInfo.additional_comments);
-
-            // Send the modified HTML file
-            res.send(accountHtml);
-        } else {
-            res.status(404).send('Project information not found');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).send('Internal server error');
-    }
-});
-
 // Route to handle sending notifications from coordinator to students
 app.post('/send-notification', async (req, res) => {
     const { message } = req.body;
@@ -562,29 +523,29 @@ app.get('/team-details/:teamId', async (req, res) => {
     }
 });
 
-// Route to handle fetching list of team-ids-project for students
-app.get('/team-ids-project', async (req, res) => {
+// Route to handle fetching list of project names
+app.get('/project-names', async (req, res) => {
     try {
-        const query = 'SELECT DISTINCT team_id FROM projects'; // Modify the query according to your database schema
+        const query = 'SELECT DISTINCT project_title FROM projects'; // Modify the query according to your database schema
         const result = await client.query(query);
-        const teamIds = result.rows.map(row => row.team_id);
-        res.json(teamIds);
+        const projectNames = result.rows.map(row => row.project_title);
+        res.json(projectNames);
     } catch (error) {
-        console.error('Error fetching team IDs:', error);
+        console.error('Error fetching project names:', error);
         res.status(500).send('Internal server error');
     }
 });
 
-// Route to handle fetching team-project-details of students
-app.get('/team-projects/:teamId', async (req, res) => {
-    const teamId = req.params.teamId;
+// Route to handle fetching project details by name
+app.get('/project-details/:name', async (req, res) => {
+    const projectName = req.params.name;
     try {
-        const query = 'SELECT * FROM projects WHERE team_id = $1'; // Modify the query according to your database schema
-        const result = await client.query(query, [teamId]);
-        const teamDetails = result.rows;
-        res.json(teamDetails);
+        const query = 'SELECT * FROM projects WHERE project_title = $1'; // Modify the query according to your database schema
+        const result = await client.query(query, [projectName]);
+        const projectDetails = result.rows;
+        res.json(projectDetails);
     } catch (error) {
-        console.error('Error fetching team details:', error);
+        console.error('Error fetching project details:', error);
         res.status(500).send('Internal server error');
     }
 });

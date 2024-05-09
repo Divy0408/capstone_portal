@@ -1,161 +1,237 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="generator" content="Mobirise v5.9.18, mobirise.com">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-  <title>Student Dashboard</title>
-  <link rel="stylesheet" href="student_assets/web/student_assets/mobirise-icons2/mobirise2.css">
-  <link rel="stylesheet" href="student_assets/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="student_assets/bootstrap/css/bootstrap-grid.min.css">
-  <link rel="stylesheet" href="student_assets/bootstrap/css/bootstrap-reboot.min.css">
-  <link rel="stylesheet" href="student_assets/dropdown/css/style.css">
-  <link rel="stylesheet" href="student_assets/theme/css/style.css">
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap"></noscript>
-  <link rel="preload" as="style" href="student_assets/mobirise/css/mbr-additional.css?v=j7xI8e"><link rel="stylesheet" href="student_assets/mobirise/css/mbr-additional.css?v=j7xI8e" type="text/css">
-  <style>
-    .item-wrapper {
-    background-color: #f8f9fa; /* Light gray background */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
-}
 
-.form-group {
-    margin-bottom: 20px;
-}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Mobirise v5.9.18, mobirise.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="student_assets/web/student_assets/mobirise-icons2/mobirise2.css">
+    <link rel="stylesheet" href="student_assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="student_assets/bootstrap/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="student_assets/bootstrap/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="student_assets/dropdown/css/style.css">
+    <link rel="stylesheet" href="student_assets/theme/css/style.css">
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap&display=swap">
+    </noscript>
+    <link rel="preload" as="style" href="student_assets/mobirise/css/mbr-additional.css?v=j7xI8e">
+    <link rel="stylesheet" href="student_assets/mobirise/css/mbr-additional.css?v=j7xI8e" type="text/css">
+    <style>
+        /* Add custom styles here */
+        body {
+            font-family: 'Inter Tight', sans-serif;
+            background-color: #f8f9fa;
+        }
 
-label {
-    font-weight: bold;
-}
+        .navbar-brand {
+            font-size: 24px;
+        }
 
-textarea {
-    resize: vertical; /* Allow vertical resizing */
-}
+        .navbar-toggler .hamburger span {
+            background-color: #000;
+        }
 
-/* Style submit button */
-button[type="submit"] {
-    background-color: #007bff; /* Blue submit button */
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        .nav-item {
+            margin-right: 20px;
+        }
 
-button[type="submit"]:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-}
-  </style>
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 5px;
+            padding: 10px 30px;
+            font-size: 18px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .item-wrapper {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
+
 <body>
-  
-  <section data-bs-version="5.1" class="menu menu2 cid-uaYAUp8AU3" once="menu" id="menu-5-uaYAUp8AU3">
-	
 
-	<nav class="navbar navbar-dropdown navbar-fixed-top navbar-expand-lg">
-		<div class="container">
-			<div class="navbar-brand">
-				
-				<span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-4">Student Hub</a></span>
-			</div>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-				<div class="hamburger">
-					<span></span>
-					<span></span>
-					<span></span>
-					<span></span>
-				</div>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav nav-dropdown" data-app-modern-menu="true"><li class="nav-item">
-						<a class="nav-link link text-black display-4" href="/home">Dashboard</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link link text-black display-4"  aria-expanded="false" href="update_project.htmla">Update Tasks</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link link text-black display-4" >Progress</a>
-					</li><li class="nav-item"><a class="nav-link link text-black display-4">Attenence</a></li></ul>
-				
-				<div class="navbar-buttons mbr-section-btn"><a class="btn btn-primary display-4" href="notifications.html"><span class="mobi-mbri mobi-mbri-alert mbr-iconfont mbr-iconfont-btn" ></span>Notifications</a></div>
-			</div>
-		</div>
-	</nav>
-</section>
+    <section data-bs-version="5.1" class="menu menu2 cid-uaYAUp8AU3" once="menu" id="menu-5-uaYAUp8AU3">
 
-<section data-bs-version="5.1" class="article14 cid-uaYAUpaJxn" id="generic-text-10-uaYAUpaJxn">
-    
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12 col-lg-10">
-                <h3 class="mbr-section-title mbr-fonts-style display-2">
-                    <strong><br></strong><br><strong>Welcome to Capstone Portal</strong></h3>
-                
+
+        <nav class="navbar navbar-dropdown navbar-fixed-top navbar-expand-lg">
+            <div class="container">
+                <div class="navbar-brand">
+
+                    <span class="navbar-caption-wrap"><a
+                            class="navbar-caption text-black text-primary display-4">Student Hub</a></span>
+                </div>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse"
+                    data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <div class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav nav-dropdown" data-app-modern-menu="true">
+                        <li class="nav-item">
+                            <a class="nav-link link text-black display-4" href="/home">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link link text-black display-4" aria-expanded="false"
+                                href="update_project.htmla">Update Tasks</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link link text-black display-4">Progress</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link link text-black display-4">Attenence</a></li>
+                    </ul>
+
+                    <div class="navbar-buttons mbr-section-btn"><a class="btn btn-primary display-4"
+                            href="/notifications.html">
+                            <span class="mobi-mbri mobi-mbri-alert mbr-iconfont mbr-iconfont-btn"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                    class="bi bi-bell-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901" />
+                                </svg></span>Notifications
+                        </a></div>
+                </div>
+            </div>
+        </nav>
+    </section>
+
+    <section data-bs-version="5.1" class="article14 cid-uaYAUpaJxn" id="generic-text-10-uaYAUpaJxn">
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 col-lg-10">
+                    <h3 class="mbr-section-title mbr-fonts-style display-2">
+                        <strong><br></strong><br><strong>Welcome to Capstone Portal</strong>
+                    </h3>
+
+                </div>
             </div>
         </div>
+    </section>
+
+    <section data-bs-version="5.1" class="article22 cid-uaZ2DgcXOT" id="article22-0">
+
+
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-4">
+                    <div class="col-12 col-md-12">
+
+                        <h5 class="mbr-section-title mbr-fonts-style mt-0 mb-4 display-2"><strong>Update
+                                Project</strong></h5>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-8 side-features">
+                    <div class="item-wrapper align-left">
+                        <form action="/student/project" method="POST" enctype="multipart/form-data"
+                            onsubmit="showAlert()">
+                            <label for="studentName">Name:</label>
+                            <input type="text" id="studentName" name="studentName" required><br>
+
+                            <label for="studentErNo">Enrollment Number:</label>
+                            <input type="text" id="studentErNo" name="studentErNo" pattern="[0-9]{11}"
+                                title="Enrollment number must be 11 digits" required><br>
+
+                            <label for="branch">Branch:</label>
+                            <select id="branch" name="branch" required><br>
+                                <option value="CE">C.E</option>
+                                <option value="IT">I.T</option>
+                                <option value="CSBS">CSBS</option>
+                                <option value="CEAI">CE-AI</option>
+                            </select>
+                            <br>
+                            <label for="projectTitle">Project Title:</label>
+                            <input type="text" id="projectTitle" name="projectTitle" required><br>
+
+                            <label for="projectDescription">Project Description:</label><br>
+                            <textarea id="projectDescription" name="projectDescription" rows="4"
+                                required></textarea><br>
+
+                            <label for="upload-file">Upload File:</label><br>
+                            <input type="file" id='upload-file' name='upload-file' accept=".pdf,.doc,.docx,.jpg,.png"
+                                required><br>
+
+                            <label for="additionalComments">Additional Comments:</label><br>
+                            <textarea id="additionalComments" name="additionalComments" rows="2"></textarea><br>
+
+                            <button type="submit">Upload</button>
+                        </form>
+    </section>
     </div>
-</section>
-
-<section data-bs-version="5.1" class="article22 cid-uaZ2DgcXOT" id="article22-0">
-  
-  
-  
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-4">
-        <div class="col-12 col-md-12">
-            
-          <h5 class="mbr-section-title mbr-fonts-style mt-0 mb-4 display-2"><strong>Update Project</strong></h5>
-          
-        </div>
-      </div>
-
-      <div class="col-lg-8 side-features">
-        <div class="item-wrapper align-left">
-            <form action="/student/project" method="POST" enctype="multipart/form-data" onsubmit="showAlert()">
-                <label for="studentName">Name:</label>
-                <input type="text" id="studentName" name="studentName" required><br>
-
-                <label for="studentErNo">Enrollment Number:</label>
-                <input type="text" id="studentErNo" name="studentErNo" pattern="[0-9]{11}" title="Enrollment number must be 11 digits" required><br>
-                
-                <label for="branch">Branch:</label>
-                <select id="branch" name="branch" required><br>
-                    <option value="CE">C.E</option>
-                    <option value="IT">I.T</option>
-                    <option value="CSBS">CSBS</option>
-                    <option value="CEAI">CE-AI</option>
-                </select>
-                <br>
-                <label for="projectTitle">Project Title:</label>
-                <input type="text" id="projectTitle" name="projectTitle" required><br>
-
-                <label for="projectDescription">Project Description:</label><br>
-                <textarea id="projectDescription" name="projectDescription" rows="4" required></textarea><br>
-
-                <label for="upload-file">Upload File:</label><br>
-                <input type="file" id='upload-file' name='upload-file' accept=".pdf,.doc,.docx,.jpg,.png" required><br>
-
-                <label for="additionalComments">Additional Comments:</label><br>
-                <textarea id="additionalComments" name="additionalComments" rows="2"></textarea><br>
-
-                <button type="submit">Upload</button>
-            </form>
-        </section>
-    </div>
-</main>
+    </main>
 
 
 
-<script>
-    function showAlert() {
-        alert("Project details submitted successfully!");
-    }
-</script>
+    <script>
+        function showAlert() {
+            alert("Project details submitted successfully!");
+        }
+    </script>
 </body>
+
 </html>

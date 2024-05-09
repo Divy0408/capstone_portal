@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
             font-weight: 600;
             background-color: #f4f4f4;
         }
+
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -20,17 +22,18 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         h2 {
             text-align: center;
             margin-bottom: 20px;
         }
-        
+
         ul {
             list-style-type: none;
             padding: 0;
             margin: 0;
         }
-        
+
         li {
             cursor: pointer;
             margin-bottom: 10px;
@@ -39,20 +42,20 @@
             border-radius: 5px;
             background-color: #f9f9f9;
         }
-        
+
         li:hover {
             background-color: #f0f0f0;
         }
-        
+
         .team-details {
             display: none;
             padding-top: 20px;
         }
-        
+
         .team-details.visible {
             display: block;
         }
-        
+
         .team-member {
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -62,77 +65,76 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h2>Team IDs</h2>
-        <ul id="team-list">
-            <!-- Dynamically populate team IDs here using JavaScript -->
+        <h2>Projects</h2>
+        <ul id="project-list">
+            <!-- Dynamically populate project names here using JavaScript -->
         </ul>
-        <!-- Display team member details here when a team ID is selected -->
-        <div id="team-details-container" class="team-details"></div>
+        <!-- Display project details here when a project name is selected -->
+        <div id="project-details-container" class="team-member"></div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Function to fetch team IDs from the backend and populate the list
-            function fetchTeamIDs() {
-                fetch('/team-ids-project')
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to fetch project names from the backend and populate the list
+            function fetchProjectNames() {
+                fetch('/project-names')
                     .then(response => response.json())
-                    .then(teamIDs => {
-                        const teamList = document.getElementById('team-list');
-                        // Clear any existing team IDs in the list
-                        teamList.innerHTML = '';
-                        // Populate the list with team IDs
-                        teamIDs.forEach(teamID => {
+                    .then(projectNames => {
+                        const projectList = document.getElementById('project-list');
+                        // Clear any existing project names in the list
+                        projectList.innerHTML = '';
+                        // Populate the list with project names
+                        projectNames.forEach(projectName => {
                             const listItem = document.createElement('li');
-                            listItem.textContent = teamID;
-                            // Add click event listener to each team ID to display details
-                            listItem.addEventListener('click', function() {
-                                // Call function to fetch and display team details when clicked
-                                fetchTeamDetails(teamID);
+                            listItem.textContent = projectName;
+                            // Add click event listener to each project name to display details
+                            listItem.addEventListener('click', function () {
+                                // Call function to fetch and display project details when clicked
+                                fetchProjectDetails(projectName);
                             });
-                            teamList.appendChild(listItem);
+                            projectList.appendChild(listItem);
                         });
                     })
                     .catch(error => {
-                        console.error('Error fetching team IDs:', error);
-                    });
-            }
-        
-            function fetchTeamDetails(teamId) {
-                fetch(`/team-projects/${teamId}`)
-                    .then(response => response.json())
-                    .then(teamDetails => {
-                        const teamDetailsContainer = document.getElementById('team-details-container');
-                        teamDetailsContainer.innerHTML = '';
-        
-                        teamDetails.forEach(detail => {
-                            const memberDiv = document.createElement('div');
-                            memberDiv.classList.add('team-member');
-                            memberDiv.innerHTML = `
-                                <h2>Projects Details</h2>
-                                <ul>
-                                    <li>Team ID: ${detail.team_id}</li>
-                                    <li>Student Name: ${detail.student_name}</li>
-                                    <li>Enrollment: ${detail.enrollment}</li>
-                                    <li>Branch: ${detail.branch}</li>
-                                    <li>Project Title: ${detail.project_title}</li>
-                                    <li>Project Description: ${detail.project_description}</li>
-                                    <li>Additional Comments: ${detail.additional_comments}</li>
-                                </ul>`;
-                            teamDetailsContainer.appendChild(memberDiv);
-                        });
-        
-                        // Show the team details container
-                        teamDetailsContainer.classList.add('visible');
-                    })
-                    .catch(error => {
-                        console.error('Error fetching team details:', error);
+                        console.error('Error fetching project names:', error);
                     });
             }
 
-            fetchTeamIDs();
+            function fetchProjectDetails(projectName) {
+                fetch(`/project-details/${projectName}`)
+                    .then(response => response.json())
+                    .then(projectDetails => {
+                        const projectDetailsContainer = document.getElementById('project-details-container');
+                        projectDetailsContainer.innerHTML = '';
+
+                        projectDetails.forEach(member => {
+                            const memberDiv = document.createElement('div');
+                            memberDiv.classList.add('project-details');
+                            memberDiv.innerHTML = `
+                                <h2>Project Name: ${projectName}</h2>
+                                <p>Team ID: ${member.team_id}</p>
+                                <p>Name: ${member.student_name}</p>
+                                <p>Enrollment: ${member.enrollment}</p>
+                                <p>Branch: ${member.branch}</p>
+                                <p>Project Description: ${member.project_description}</p>
+                            `;
+                            projectDetailsContainer.appendChild(memberDiv);
+                        });
+
+                        // Show the project details container
+                        projectDetailsContainer.classList.add('visible');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching project details:', error);
+                    });
+            }
+
+            fetchProjectNames();
         });
     </script>
 </body>
+
 </html>
