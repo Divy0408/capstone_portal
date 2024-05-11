@@ -223,7 +223,7 @@ app.post('/change-password', async (req, res) => {
             req.session.student = student;
 
             // Redirect to home page or account page after successful password change
-            res.redirect('/home.html');
+            res.redirect('/home');
         } catch (error) {
             console.error('Error:', error);
             res.status(500).send('Internal server error');
