@@ -97,57 +97,137 @@ app.post('/register', async (req, res) => {
     }
 });
 
+// try {
+    //     let query;
+    //     if (isEnrollmentNumber(username)){
+    //         query = 'SELECT * FROM students WHERE enrollment = $1';
+    //     } else if (isEmail(username)){
+    //         query = 'SELECT * FROM coordinator WHERE email = $1';
+    //     } else {
+    //         res.redirect('/?error=Invalid input format');
+    //         return;
+    //     }
+
+    //     const result = await client.query(query, [username]);
+
+    //     if (result.rows.length > 0) {
+    //         const user = result.rows[0];
+    //         if (password === user.password) {
+    //             // Password is correct
+    //             if (isEnrollmentNumber(username)) {
+    //                 // Check if the password matches the enrollment number
+    //                 if (password === username) {
+    //                     // Password matches the enrollment number, redirect to change password page
+    //                     req.session.student = user;
+    //                     res.redirect('/change-password');
+    //                     return;
+    //                 }
+    //             }
+    //             // Proceed with regular login
+    //             if (isEnrollmentNumber(username)) {
+    //                 req.session.student = user;
+    //                 res.redirect('/home');
+    //             } else {
+    //                 req.session.coordinator = user;
+    //                 res.redirect('/coordinator.html');
+    //             }
+    //         } else {
+    //             // Incorrect password, redirect back to login page with error message
+    //             res.redirect('/login.html?error=Incorrect password');
+    //         }
+    //     } else {
+    //         // User not found, redirect back to login page with error message
+    //         res.redirect('/login.html?error=Invalid Credentials');
+    //     }
+    // } catch (error) {
+    //     console.error('Error:', error);
+    //     res.status(500).send('Internal server error');
+    // }
+
 // Route to handle login form submission
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        let query;
-        if (isEnrollmentNumber(username)){
-            query = 'SELECT * FROM students WHERE enrollment = $1';
-        } else if (isEmail(username)){
-            query = 'SELECT * FROM coordinator WHERE email = $1';
-        } else {
-            res.redirect('/?error=Invalid input format');
-            return;
-        }
+        // Check if the username is a valid student, coordinator, or guide
+        if (isEnrollmentNumber(username)) {
+            const result = await client.query('SELECT * FROM students WHERE enrollment = $1', [username]);
 
-        const result = await client.query(query, [username]);
-
-        if (result.rows.length > 0) {
-            const user = result.rows[0];
-            if (password === user.password) {
-                // Password is correct
-                if (isEnrollmentNumber(username)) {
-                    // Check if the password matches the enrollment number
-                    if (password === username) {
-                        // Password matches the enrollment number, redirect to change password page
-                        req.session.student = user;
-                        res.redirect('/change-password');
-                        return;
-                    }
-                }
-                // Proceed with regular login
-                if (isEnrollmentNumber(username)) {
-                    req.session.student = user;
+            if (result.rows.length > 0) {
+                const student = result.rows[0];
+                if (password === student.password) {
+                    // Password is correct, redirect to student dashboard
+                    req.session.student = student;
                     res.redirect('/home');
                 } else {
-                    req.session.coordinator = user;
-                    res.redirect('/coordinator.html');
+                    // Incorrect password, redirect back to login page with error message
+                    res.redirect('/?error=Incorrect password');
                 }
             } else {
-                // Incorrect password, redirect back to login page with error message
-                res.redirect('/login.html?error=Incorrect password');
+                // Student not found, redirect back to login page with error message
+                res.redirect('/?error=Invalid Credentials');
+            }
+        } else if (isCoordinatorEmail(username)) {
+            const result = await client.query('SELECT * FROM coordinator WHERE email = $1', [username]);
+
+            if (result.rows.length > 0) {
+                const coordinator = result.rows[0];
+                if (password === coordinator.password) {
+                    // Password is correct, redirect to coordinator dashboard
+                    req.session.coordinator = coordinator;
+                    res.redirect('/coordinator.html');
+                } else {
+                    // Incorrect password, redirect back to login page with error message
+                    res.redirect('/?error=Incorrect password');
+                }
+            } else {
+                // Coordinator not found, redirect back to login page with error message
+                res.redirect('/?error=Invalid Credentials');
+            }
+        } else if (isGuideEmail(username)) {
+            const result = await client.query('SELECT * FROM guide WHERE email = $1', [username]);
+
+            if (result.rows.length > 0) {
+                const guide = result.rows[0];
+                if (password === guide.password) {
+                    // Password is correct, redirect to guide dashboard
+                    req.session.guide = guide;
+                    res.redirect('/guide.html');
+                } else {
+                    // Incorrect password, redirect back to login page with error message
+                    res.redirect('/?error=Incorrect password');
+                }
+            } else {
+                // Guide not found, redirect back to login page with error message
+                res.redirect('/?error=Invalid Credentials');
             }
         } else {
-            // User not found, redirect back to login page with error message
-            res.redirect('/login.html?error=Invalid Credentials');
+            // Not a valid input, redirect back to login page with error message
+            res.redirect('/?error=Invalid input format');
         }
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal server error');
     }
 });
+
+// Function to check if input resembles an enrollment number
+function isEnrollmentNumber(input) {
+    // Check if input consists of 11 digits
+    return /^\d{11}$/.test(input);
+}
+
+// Function to check if input resembles a coordinator email
+function isCoordinatorEmail(input) {
+    // Simple email validation regex, can be improved for production use
+    return /\S+@gmail\.com$/.test(input);
+}
+
+// Function to check if input resembles a guide email
+function isGuideEmail(input) {
+    // Simple email validation regex, can be improved for production use
+    return /\S+@ganpatuniversity\.ac\.in$/.test(input);
+}
 
 // Route to handle change password page
 app.get('/change-password', async (req, res) => {
@@ -160,7 +240,7 @@ app.get('/change-password', async (req, res) => {
     if (isEnrollmentNumber(student.enrollment)) {
         res.sendFile(__dirname + '/changePassword.html');
     } else {
-        res.redirect('/home.html'); // Redirect coordinators away from this page
+        res.redirect('/home'); // Redirect coordinators away from this page
     }
 });
 
@@ -206,7 +286,7 @@ app.post('/change-password', async (req, res) => {
             res.status(500).send('Internal server error');
         }
     } else {
-        res.redirect('/home.html'); // Redirect coordinators away from this page
+        res.redirect('/home'); // Redirect coordinators away from this page
     }
 });
 
@@ -372,20 +452,7 @@ app.get('/password-reset-success', (req, res) => {
     res.sendFile(__dirname + '/password-reset-success.html');
 });
 
-
-// Function to check if input resembles an enrollment number
-function isEnrollmentNumber(input) {
-    // Check if input consists of 11 digits
-    return /^\d{11}$/.test(input);
-}
-
-// Function to check if input resembles an email address
-function isEmail(input) {
-    // Simple email validation regex, can be improved for production use
-    return /\S+@ganpatuniversity\.ac\.in$/.test(input);
-}
-
-
+// Route to handle form submission of project
 app.get('/project', async(req, res) => {
     const student = req.session.student;
     if (!student) {
@@ -574,6 +641,42 @@ app.post('/allocate-guide/:teamId', async (req, res) => {
     } catch (error) {
         console.error('Error allocating guide:', error);
         res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Route to handle student attendance page
+app.get('/attendance', async (req, res) => {
+    const student = req.session.student;
+    if (!student) {
+        res.redirect('/login.html?error=Please login to access your account');
+        return;
+    }
+
+    try {
+        const enrollment = student.enrollment;
+        // Query the database to retrieve student information based on enrollment
+        const query = 'SELECT student_name, attendance, first_internal_marks, second_internal_marks FROM students WHERE enrollment = $1';
+        const result = await client.query(query, [enrollment]);
+
+        if (result.rows.length > 0) {
+            // Render the account.html file with student information injected
+            let accountHtml = fs.readFileSync(__dirname + '/attendance.html', 'utf8');
+            const studentInfo = result.rows[0]; // Assuming only one row per user
+
+            // Inject student information into the HTML file
+            accountHtml = accountHtml.replace('{{student}}', studentInfo.student_name);
+            accountHtml = accountHtml.replace('{{attendance}}', studentInfo.attendance);
+            accountHtml = accountHtml.replace('{{firstInternalMarks}}', studentInfo.first_internal_marks);
+            accountHtml = accountHtml.replace('{{secondInternalMarks}}', studentInfo.second_internal_marks);
+
+            // Send the modified HTML file
+            res.send(accountHtml);
+        } else {
+            res.status(404).send('Attendance information not found');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal server error');
     }
 });
 

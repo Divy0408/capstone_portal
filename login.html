@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html  >
 <head>
-  
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="generator" content="Mobirise v5.9.18, mobirise.com">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
   <link rel="shortcut icon" href="assets/images/logo1.png" type="image/x-icon">
   <meta name="description" content="">
-  
-  
-  <title>Home</title>
-  <link rel="icon" href="logo1.png">
+  <title>Login</title>
   <link rel="stylesheet" href="assets/web/assets/mobirise-icons2/mobirise2.css">
   <link rel="stylesheet" href="assets/web/assets/mobirise-icons/mobirise-icons.css">
   <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
@@ -25,8 +21,6 @@
   <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css?v=j2R0Lm"><link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css?v=j2R0Lm" type="text/css">
   
   <style>
-    /* Custom CSS for the login form */
-
 .form-box {
   max-width: 400px;
   margin: 0 auto;
@@ -36,13 +30,11 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   float: left; 
 }
-
 h1#title {
   text-align: center;
   margin-bottom: 20px;
-  color: #0070e8; /* Blue color for login heading */
+  color: #0070e8; 
 }
-
 .input-group {
   margin-bottom: 20px;
 }
@@ -52,13 +44,13 @@ h1#title {
 }
 
 .input-field input {
-  width: calc(100% - 20px); /* Increase width of text boxes */
+  width: calc(100% - 20px); 
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 .inputfield2 input {
-  width: calc(124% - 19px); /* Increase width of text boxes */
+  width: calc(117% - 19px); 
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -68,7 +60,7 @@ h1#title {
 .btn-field button {
   width: 100%;
   padding: 10px;
-  background-color: orange; /* Orange color for login button */
+  background-color: orange; 
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -76,7 +68,7 @@ h1#title {
 }
 
 .btn-field button:hover {
-  background-color: darkorange; /* Darker shade of orange on hover */
+  background-color: darkorange; 
 }
 
 p {
@@ -91,25 +83,19 @@ a {
 a:hover {
   text-decoration: underline;
 }
-
-
-  </style>
-  
-  
+  </style> 
 </head>
 <body>
-  
   <section data-bs-version="5.1" class="menu menu2 cid-sFF0ciwnEL" once="menu" id="menu2-0">
-    
     <nav class="navbar navbar-dropdown navbar-fixed-top navbar-expand-lg">
         <div class="container">
             <div class="navbar-brand">
                 <span class="navbar-logo">
                     
-                        <img src="assets/images/logo1.png" alt="" style="height: 4.9rem;">
+                        <img src="assets/images/logo1.png" style="height: 4.9rem;">
                     
                 </span>
-                <span class="navbar-caption-wrap"><a class="navbar-caption text-primary display-5" >Capstone Portal</a></span>
+                <span class="navbar-caption-wrap"><p class="navbar-caption text-primary display-5" >Capstone Portal</p></span>
             </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <div class="hamburger">
@@ -142,11 +128,11 @@ a:hover {
         <form action="/login" method="post">
             <div class="input-group">
                 <div class="input-field">
-                    <label style="font-size: 20px;" for="username"><b>Email or Enrollment number:</b></label> <input type="text" id="username" name="username" placeholder="Email ID / Er. no.">
+                    <label style="font-size: 20px;" for="username"><b>Email or Enrollment number:</b></label> <input type="text" id="username" name="username" placeholder="Email ID / Er. no." required>
                 </div>
         
                 <div class="inputfield2">
-                    <label for="password" style="font-size: 20px;"><b>Password:</b></label> <input type="password" id="password" name="password" placeholder="Password"><br>
+                    <label for="password" style="font-size: 20px;"><b>Password:</b></label> <input type="password" id="password" name="password" placeholder="Password" required><br>
                 </div>
                 
                 <p style="font-size: 18px;"> Forgot password?  <a href="/forgot-password">Click Here</a> </p>
