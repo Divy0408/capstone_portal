@@ -692,11 +692,38 @@ app.get('/coordinator-info', async (req, res) => {
             // Send the modified HTML file
             res.send(accountHtml);
         } else {
-            res.status(404).send('Guide information not found');
+            res.status(404).send('Coordinator information not found');
         }
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal server error');
+    }
+});
+
+// Route to fetch list of examiners
+app.get('/examiners', async (req, res) => {
+    try {
+        const query = 'SELECT name FROM guide'; // Adjust the query according to your database schema
+        const result = await client.query(query);
+        const examiner = result.rows;
+        res.json(examiner);
+    } catch (error) {
+        console.error('Error fetching examiners:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Route to allocate examiner to a team
+app.post('/allocate-examiner/:teamId', async (req, res) => {
+    const teamId = req.params.teamId;
+    const { examiner } = req.body;
+    try {
+        const query = 'UPDATE students SET examiner = $1 WHERE team_id = $2'; // Adjust the query according to your database schema
+        await client.query(query, [examiner, teamId]);
+        res.json({ message: `Examiner ${examiner} allocated to team ${teamId}` });
+    } catch (error) {
+        console.error('Error allocating examiner:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 

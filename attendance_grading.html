@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="guide_assets/images/logo1-2-81x95.png" type="image/x-icon">
     <meta name="description"
         content="A personalized dashboard for students to track their academic progress and access resources.">
-    <title>Team Details</title>
+    <title>Attendance & Grading</title>
     <link rel="stylesheet" href="guide_assets/web/guide_assets/mobirise-icons2/mobirise2.css">
     <link rel="stylesheet" href="guide_assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="guide_assets/bootstrap/css/bootstrap-grid.min.css">
@@ -69,41 +69,6 @@
             justify-content: center;
             align-items: center;
             border-radius: 50%;
-        }
-
-        /* Add custom styles for better UI */
-        #team-list {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        #team-list li {
-            margin-bottom: 10px;
-            cursor: pointer;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        #team-list li:hover {
-            background-color: #e0e0e0;
-        }
-
-        .team-member {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
-        .team-member h3 {
-            margin-top: 0;
-            color: #007bff;
-        }
-
-        .team-member p {
-            margin-bottom: 5px;
         }
     </style>
 
@@ -181,84 +146,102 @@
             <div class="row justify-content-center">
                 <div class="col-lg-4">
                     <div class="col-12 col-md-12">
-                        <h5 class="mbr-section-title mbr-fonts-style mt-0 mb-4 display-2"><strong>Team Details</strong>
+                        <h5 class="mbr-section-title mbr-fonts-style mt-0 mb-4 display-2"><strong>Attendance and Grading</strong>
                         </h5>
-                        <img src="team.png" height="160px">
+                        <h6 class="mbr-section-subtitle mbr-fonts-style mt-0 mb-4 display-7"></h6>
                     </div>
                 </div>
                 <div class="col-lg-8 side-features">
                     <div class="item-wrapper align-left">
-                        <h2 style="color: rgb(95, 179, 225);">Team IDs</h2>
-                        <div class="container">
-                            <ul id="team-list">
-                                <!-- Dynamically populate team IDs here using JavaScript -->
-                            </ul>
-                            <!-- Display team member details here when a team ID is selected -->
-                            <div id="team-details-container" class="team-details"></div>
-                        </div>
-
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                // Function to fetch team IDs from the backend and populate the list
-                                function fetchTeamIDs() {
-                                    // Replace this fetch request with your actual backend endpoint to fetch team IDs
-                                    fetch('/team-ids')
-                                        .then(response => response.json())
-                                        .then(teamIDs => {
-                                            const teamList = document.getElementById('team-list');
-                                            // Clear any existing team IDs in the list
-                                            teamList.innerHTML = '';
-                                            // Populate the list with team IDs
-                                            teamIDs.forEach(teamID => {
-                                                const listItem = document.createElement('li');
-                                                listItem.textContent = teamID;
-                                                // Add click event listener to each team ID to display details
-                                                listItem.addEventListener('click', function () {
-                                                    // Call function to fetch and display team details when clicked
-                                                    fetchTeamDetails(teamID);
-                                                });
-                                                teamList.appendChild(listItem);
-                                            });
-                                        })
-                                        .catch(error => {
-                                            console.error('Error fetching team IDs:', error);
-                                        });
-                                }
-
-                                function fetchTeamDetails(teamId) {
-                                    fetch(`/team-details/${teamId}`)
-                                        .then(response => response.json())
-                                        .then(teamDetails => {
-                                            const teamDetailsContainer = document.getElementById('team-details-container');
-                                            teamDetailsContainer.innerHTML = '';
-
-                                            teamDetails.forEach(member => {
-                                                const memberDiv = document.createElement('div');
-                                                memberDiv.classList.add('team-member');
-                                                memberDiv.innerHTML = `
-                                                    <h3>Team Member</h3>
-                                                    <p>Name: ${member.student_name}</p>
-                                                    <p>Enrollment Number: ${member.enrollment}</p>
-                                                    <p>Class: ${member.class}</p>
-                                                    <p>Batch: ${member.batch}</p>
-                                                    <p>Email: ${member.email_id}</p>
-                                                    <p>Branch: ${member.branch}</p>
-                                                    <p>Semester: ${member.semester}</p>
-                                                `;
-                                                teamDetailsContainer.appendChild(memberDiv);
-                                            });
-
-                                            // Show the team details container
-                                            teamDetailsContainer.classList.add('visible');
-                                        })
-                                        .catch(error => {
-                                            console.error('Error fetching team details:', error);
-                                        });
-                                }
-
-                                fetchTeamIDs();
-                            });
-                        </script>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                margin: 0;
+                                padding: 0;
+                                background-color: #f5f5f5; /* Background color */
+                            }
+                            
+                            h1 {
+                                text-align: center;
+                            }
+                            
+                            #attendance-form, #grading-form {
+                                max-width: 400px;
+                                margin: 20px auto;
+                                background-color: #ffffff; /* Form background color */
+                                padding: 20px;
+                                border-radius: 5px;
+                                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                            }
+                            
+                            .form-group {
+                                margin-bottom: 20px;
+                            }
+                            
+                            .form-group label {
+                                display: block;
+                                margin-bottom: 5px;
+                            }
+                            
+                            .form-group input[type="text"],
+                            .form-group input[type="date"],
+                            .form-group input[type="number"] {
+                                width: calc(100% - 20px);
+                                padding: 8px;
+                                border: 1px solid #ccc;
+                                border-radius: 3px;
+                            }
+                            
+                            .form-group input[type="checkbox"] {
+                                width: auto;
+                                margin-right: 5px;
+                            }
+                            
+                            button {
+                                display: block;
+                                width: 100%;
+                                padding: 10px;
+                                background-color: #ff9966; /* Button background color */
+                                color: #fff;
+                                border: none;
+                                border-radius: 3px;
+                                cursor: pointer;
+                            }
+                            
+                            button:hover {
+                                background-color: #e6834c; /* Button hover background color */
+                            }
+                                                       
+                        </style>
+                        <form id="attendance-form">
+                            <div class="form-group">
+                                <label for="week">Week:</label>
+                                <input type="Number" id="week" name="week" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="date">Date:</label>
+                                <input type="date" id="date" name="date" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Attendance:</label>
+                                <input type="checkbox" id="present" name="present">Present &nbsp;
+                                <input type="checkbox" id="absent" name="absent">Absent
+                            </div>
+                            <button type="submit">Submit</button>
+                        </form>
+                        <form id="grading-form">
+                            <div class="form-group">
+                                <label for="project-name">Team id & name:</label>
+                                <input type="text" id="project-name" name="project-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="grading">Grading (out of 10):</label>
+                                <input type="number" id="grading" name="grading" min="0" max="10" step="0.1" required>
+                            </div>
+                            <button type="submit">Submit</button>
+                        </form>
+                    
                     </div>
                 </div>
             </div>
