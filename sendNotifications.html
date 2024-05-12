@@ -67,7 +67,7 @@
             box-sizing: border-box;
         }
 
-        button {
+        .button {
             background-color: #ff7920;
             color: #fff;
             border: none;
@@ -79,7 +79,7 @@
             
         }
 
-        button:hover {
+        .button:hover {
             background-color: #ff7920;
         }
     </style>
@@ -116,7 +116,7 @@
                     <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/teamDetails.html">Team Details</a></li>
                     <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/team-projects.html">View Projects</a>
                     </li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/attendance_grading.html">Attendance & Grading</a></li></ul>
-                    <a href="#"><button type="button" class="icon-button">
+                    <a href="/guide-info"><button type="button" class="icon-button">
                       <span class="material-icons">account_circle</span>
                   </button></a> &nbsp; &nbsp; &nbsp;
                       
@@ -160,7 +160,7 @@
             <h2 style="color: rgb(95, 179, 225);">&nbsp;&nbsp;Send Notification</h2>
             <div class="container">
                 <textarea id="notificationMessage" rows="4" placeholder="Compose Notification"></textarea>
-                <button onclick="sendNotification()">Send Notification</button>
+                <button class="button" onclick="sendNotification()">Send Notification</button>
             </div>
         
             <script>
