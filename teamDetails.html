@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="guide_assets/images/logo1-2-81x95.png" type="image/x-icon">
     <meta name="description"
         content="A personalized dashboard for students to track their academic progress and access resources.">
-    <title>Project Details</title>
+    <title>Team Details</title>
     <link rel="stylesheet" href="guide_assets/web/guide_assets/mobirise-icons2/mobirise2.css">
     <link rel="stylesheet" href="guide_assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="guide_assets/bootstrap/css/bootstrap-grid.min.css">
@@ -71,13 +71,13 @@
             border-radius: 50%;
         }
 
-        /* Custom styles for better UI */
-        #project-list {
+        /* Add custom styles for better UI */
+        #team-list {
             list-style-type: none;
             padding: 0;
         }
 
-        #project-list li {
+        #team-list li {
             margin-bottom: 10px;
             cursor: pointer;
             padding: 10px;
@@ -86,23 +86,23 @@
             transition: background-color 0.3s;
         }
 
-        #project-list li:hover {
+        #team-list li:hover {
             background-color: #e0e0e0;
         }
 
-        .project-details {
+        .team-member {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
             margin-bottom: 10px;
         }
 
-        .project-details h3 {
+        .team-member h3 {
             margin-top: 0;
             color: #007bff;
         }
 
-        .project-details p {
+        .team-member p {
             margin-bottom: 5px;
         }
     </style>
@@ -181,79 +181,82 @@
             <div class="row justify-content-center">
                 <div class="col-lg-4">
                     <div class="col-12 col-md-12">
-                        <h5 class="mbr-section-title mbr-fonts-style mt-0 mb-4 display-2"><strong>Project Details</strong>
+                        <h5 class="mbr-section-title mbr-fonts-style mt-0 mb-4 display-2"><strong>Team Details</strong>
                         </h5>
                         <img src="team.png" height="160px">
                     </div>
                 </div>
                 <div class="col-lg-8 side-features">
                     <div class="item-wrapper align-left">
-                        <h2 style="color: rgb(95, 179, 225);">Project Name</h2>
+                        <h2 style="color: rgb(95, 179, 225);">Team IDs</h2>
                         <div class="container">
-                            <ul id="project-list">
-                                <!-- Dynamically populate project names here using JavaScript -->
+                            <ul id="team-list">
+                                <!-- Dynamically populate team IDs here using JavaScript -->
                             </ul>
-                            <!-- Display project details here when a project name is selected -->
-                            <div id="project-details-container" class="team-member"></div>
+                            <!-- Display team member details here when a team ID is selected -->
+                            <div id="team-details-container" class="team-details"></div>
                         </div>
-                    
+
                         <script>
                             document.addEventListener('DOMContentLoaded', function () {
-                                // Function to fetch project names from the backend and populate the list
-                                function fetchProjectNames() {
-                                    fetch('/project-names')
+                                // Function to fetch team IDs from the backend and populate the list
+                                function fetchTeamIDs() {
+                                    // Replace this fetch request with your actual backend endpoint to fetch team IDs
+                                    fetch('/team-ids')
                                         .then(response => response.json())
-                                        .then(projectNames => {
-                                            const projectList = document.getElementById('project-list');
-                                            // Clear any existing project names in the list
-                                            projectList.innerHTML = '';
-                                            // Populate the list with project names
-                                            projectNames.forEach(projectName => {
+                                        .then(teamIDs => {
+                                            const teamList = document.getElementById('team-list');
+                                            // Clear any existing team IDs in the list
+                                            teamList.innerHTML = '';
+                                            // Populate the list with team IDs
+                                            teamIDs.forEach(teamID => {
                                                 const listItem = document.createElement('li');
-                                                listItem.textContent = projectName;
-                                                // Add click event listener to each project name to display details
+                                                listItem.textContent = teamID;
+                                                // Add click event listener to each team ID to display details
                                                 listItem.addEventListener('click', function () {
-                                                    // Call function to fetch and display project details when clicked
-                                                    fetchProjectDetails(projectName);
+                                                    // Call function to fetch and display team details when clicked
+                                                    fetchTeamDetails(teamID);
                                                 });
-                                                projectList.appendChild(listItem);
+                                                teamList.appendChild(listItem);
                                             });
                                         })
                                         .catch(error => {
-                                            console.error('Error fetching project names:', error);
+                                            console.error('Error fetching team IDs:', error);
                                         });
                                 }
-                    
-                                function fetchProjectDetails(projectName) {
-                                    fetch(`/project-details/${projectName}`)
+
+                                function fetchTeamDetails(teamId) {
+                                    fetch(`/team-details/${teamId}`)
                                         .then(response => response.json())
-                                        .then(projectDetails => {
-                                            const projectDetailsContainer = document.getElementById('project-details-container');
-                                            projectDetailsContainer.innerHTML = '';
-                    
-                                            projectDetails.forEach(member => {
+                                        .then(teamDetails => {
+                                            const teamDetailsContainer = document.getElementById('team-details-container');
+                                            teamDetailsContainer.innerHTML = '';
+
+                                            teamDetails.forEach(member => {
                                                 const memberDiv = document.createElement('div');
-                                                memberDiv.classList.add('project-details');
+                                                memberDiv.classList.add('team-member');
                                                 memberDiv.innerHTML = `
-                                                    <h3>Project Name: ${projectName}</h3>
-                                                    <p>Team ID: ${member.team_id}</p>
+                                                    <h3>Team Member</h3>
                                                     <p>Name: ${member.student_name}</p>
-                                                    <p>Enrollment: ${member.enrollment}</p>
+                                                    <p>Enrollment Number: ${member.enrollment}</p>
+                                                    <p>Class: ${member.class}</p>
+                                                    <p>Batch: ${member.batch}</p>
+                                                    <p>Email: ${member.email_id}</p>
                                                     <p>Branch: ${member.branch}</p>
-                                                    <p>Project Description: ${member.project_description}</p>
+                                                    <p>Semester: ${member.semester}</p>
                                                 `;
-                                                projectDetailsContainer.appendChild(memberDiv);
+                                                teamDetailsContainer.appendChild(memberDiv);
                                             });
-                    
-                                            // Show the project details container
-                                            projectDetailsContainer.classList.add('visible');
+
+                                            // Show the team details container
+                                            teamDetailsContainer.classList.add('visible');
                                         })
                                         .catch(error => {
-                                            console.error('Error fetching project details:', error);
+                                            console.error('Error fetching team details:', error);
                                         });
                                 }
-                    
-                                fetchProjectNames();
+
+                                fetchTeamIDs();
                             });
                         </script>
                     </div>

@@ -86,7 +86,6 @@ app.post('/register', async (req, res) => {
                 'INSERT INTO students (enrollment, password, student_name, class, batch, email_id, branch, semester, team_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
                 [enrollment, password, student_name, class_name, batch, email_id, branch, semester, team_id]
             );
-
         }
 
         // Send a success response
@@ -133,10 +132,10 @@ app.post('/login', async (req, res) => {
                 // Proceed with regular login
                 if (isEnrollmentNumber(username)) {
                     req.session.student = user;
-                    res.redirect('/home');
+                    res.redirect('/student_home.html');
                 } else if(isGuideEmail(username)) {
                     req.session.guide = user;
-                    res.redirect('/guide.html');
+                    res.redirect('/guide_home.html');
                 } else{
                     req.session.coordinator = user;
                     res.redirect('/coordinator.html');
@@ -183,7 +182,7 @@ app.get('/change-password', async (req, res) => {
     if (isEnrollmentNumber(student.enrollment)) {
         res.sendFile(__dirname + '/changePassword.html');
     } else {
-        res.redirect('/home'); // Redirect coordinators away from this page
+        res.redirect('/student_home.html'); // Redirect coordinators away from this page
     }
 });
 
@@ -223,13 +222,13 @@ app.post('/change-password', async (req, res) => {
             req.session.student = student;
 
             // Redirect to home page or account page after successful password change
-            res.redirect('/home');
+            res.redirect('/student_home.html');
         } catch (error) {
             console.error('Error:', error);
             res.status(500).send('Internal server error');
         }
     } else {
-        res.redirect('/home'); // Redirect coordinators away from this page
+        res.redirect('/student_home.html'); // Redirect coordinators away from this page
     }
 });
 
@@ -413,17 +412,25 @@ app.post('/project', upload.single('upload-file'), async (req, res) => {
     }
     try {
         // Extract form data
-        const { studentName, studentErNo, branch, projectTitle, projectDescription, additionalComments } = req.body;
+        const {teamID, studentName, studentErNo, branch, projectTitle, projectDescription, additionalComments } = req.body;
 
         // Retrieve uploaded file
         const uploadFile = req.file;
 
-        // Insert form data into the database
-        const query = 'INSERT INTO projects (student_name, student_er_no, branch, project_title, project_description, file_path, additional_comments) VALUES ($1, $2, $3, $4, $5, $6, $7)';
-        await client.query(query, [studentName, studentErNo, branch, projectTitle, projectDescription, uploadFile, additionalComments]);
+        // Check if record with the same enrollment number exists
+        const existingRecord = await client.query('SELECT * FROM projects WHERE enrollment = $1', [studentErNo]);
 
+        if (existingRecord.rows.length > 0) {
+            // If record exists, update it
+            const updateQuery = 'UPDATE projects SET team_id = $1, student_name = $2, branch = $3, project_title = $4, project_description = $5, file_path = $6, additional_comments = $7 WHERE enrollment = $8';
+            await client.query(updateQuery, [teamID, studentName, branch, projectTitle, projectDescription, uploadFile, additionalComments, studentErNo]);
+        } else {
+            // If record doesn't exist, insert a new record
+            const insertQuery = 'INSERT INTO projects (team_id, student_name, enrollment, branch, project_title, project_description, file_path, additional_comments) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
+            await client.query(insertQuery, [teamID, studentName, studentErNo, branch, projectTitle, projectDescription, uploadFile, additionalComments]);
+        }
         // Send a success response
-        res.redirect('/home.html');
+        res.redirect('/student_home.html');
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal server error');
@@ -431,7 +438,7 @@ app.post('/project', upload.single('upload-file'), async (req, res) => {
 });
 
 // Route to handle student info. page
-app.get('/home', async (req, res) => {
+app.get('/info', async (req, res) => {
     const student = req.session.student;
     if (!student) {
         res.redirect('/login.html?error=Please login to access your account');
@@ -446,7 +453,7 @@ app.get('/home', async (req, res) => {
 
         if (result.rows.length > 0) {
             // Render the account.html file with student information injected
-            let accountHtml = fs.readFileSync(__dirname + '/home.html', 'utf8');
+            let accountHtml = fs.readFileSync(__dirname + '/info.html', 'utf8');
             const studentInfo = result.rows[0]; // Assuming only one row per user
 
             // Inject student information into the HTML file
@@ -616,6 +623,41 @@ app.get('/attendance', async (req, res) => {
             res.send(accountHtml);
         } else {
             res.status(404).send('Attendance information not found');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
+// Route to handle guide info. page
+app.get('/guide-info', async (req, res) => {
+    const guide = req.session.guide;
+    if (!guide) {
+        res.redirect('/login.html?error=Please login to access your account');
+        return;
+    }
+
+    try {
+        const email = guide.email;
+        // Query the database to retrieve student information based on enrollment
+        const query = 'SELECT name, email FROM guide WHERE email = $1';
+        const result = await client.query(query, [email]);
+
+        if (result.rows.length > 0) {
+            // Render the account.html file with student information injected
+            let accountHtml = fs.readFileSync(__dirname + '/guide_info.html', 'utf8');
+            const studentInfo = result.rows[0]; // Assuming only one row per user
+
+            // Inject student information into the HTML file
+            accountHtml = accountHtml.replace('{{guide}}', studentInfo.name);
+            accountHtml = accountHtml.replace('{{guideName}}', studentInfo.name);
+            accountHtml = accountHtml.replace('{{emailId}}', studentInfo.email);
+
+            // Send the modified HTML file
+            res.send(accountHtml);
+        } else {
+            res.status(404).send('Guide information not found');
         }
     } catch (error) {
         console.error('Error:', error);

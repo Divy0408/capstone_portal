@@ -7,8 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
   <link rel="shortcut icon" href="student_assets/images/logo1-2-81x95.png" type="image/x-icon">
   <meta name="description" content="A personalized dashboard for students to track their academic progress and access resources.">
-  <title>Attendance</title>
-  <link rel="icon" href="logo1.png">
+  <title>Student Info</title>
   <link rel="stylesheet" href="student_assets/web/student_assets/mobirise-icons2/mobirise2.css">
   <link rel="stylesheet" href="student_assets/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="student_assets/bootstrap/css/bootstrap-grid.min.css">
@@ -99,7 +98,11 @@
                   <a href="/notifications.html"><button type="button" class="icon-button">
                       <span class="material-icons">notifications</span>
                       <span class="icon-button__badge">0</span>
-                    </button></a>
+                    </button></a>&nbsp; &nbsp; &nbsp;
+                    
+                    <a href="/logout"><button type="button" class="icon-button">
+                      <span class="material-icons">logout</span>
+                  </button></a>
                 
             </div>
         </div>
@@ -126,47 +129,57 @@
     <div class="row justify-content-center">
       <div class="col-lg-4">
         <div class="col-12 col-md-12">
-            <h5 class="mbr-section-title mbr-fonts-style mt-0 mb-4 display-2"><strong>Attendance Information</strong>
-            </h5>
-
-          </div>
-        </div>
-
-        <div class="col-lg-8 side-features">
-          <div class="item-wrapper align-left">
-            <div id="attendanceInfo">
-              <h1 style="color: rgb(95, 179, 225);">Hello <span id="student"></span></h1>
-              <div id="attendanceInfo"><br>
-                <p>Attendance: <span id="attendance"></span>%</p>
-                <p>First Internal Marks: <span id="firstInternalMarks"></span></p>
-                <p>Second Internal Marks: <span id="secondInternalMarks"></span></p>
-                <p>Week-1 : P</p>
-                <p>Week-2 : P</p>
-                <p>Week-3 : P</p>
-                <p>Week-4 : P</p>
-                <p>Week-5 : P</p>
-                <p>Week-6 : A</p>
-                <p>Week-7(1st Internal Exam) : P</p>
-                <p>Week-8 : A</p>
-                <p>Week-9 : A</p>
-                <p>Week-10 : P</p>
-                <p>Week-11 : A</p>
-              </div>
-
-              <script>
-                // Replace placeholders with actual attendance information
-                document.getElementById('student').innerText = '{{student}}';
-                document.getElementById('attendance').innerText = '{{attendance}}';
-                document.getElementById('firstInternalMarks').innerText = '{{firstInternalMarks}}';
-                document.getElementById('secondInternalMarks').innerText = '{{secondInternalMarks}}';
-              </script>
-              <div class="counter-container mbr-text mbr-fonts-style display-7"></div>
-            </div>
-
-          </div>
+          <h5 class="mbr-section-title mbr-fonts-style mt-0 mb-4 display-2"><strong>Student Information</strong></h5>
+          <h6 class="mbr-section-subtitle mbr-fonts-style mt-0 mb-4 display-7"></h6>
+          
         </div>
       </div>
-  </section>
-</body>
 
+      <div class="col-lg-8 side-features">
+        <div class="item-wrapper align-left">
+          <div class="counter-container mbr-text mbr-fonts-style display-7"></div>
+          <div id="studentInfo">
+            <h1 style="color: rgb(95, 179, 225);">Hello, <span id="student"></span></h1>
+            <div id="studentInfo"><br>
+            <p>Name: <span id="studentName"></span></p>
+            <p>Enrollment: <span id="enrollment"></span></p>
+            <p>Email ID: <span id="emailId"></span></p>
+            <p>Branch: <span id="branch"></span></p>
+            <p>Semester: <span id="semester"></span>th</p>
+            <p>Class: <span id="class"></span></p>
+            <p>Batch: <span id="batch"></span></p>
+            <p>Guide Name: <span id="guide"></span></p>
+        </div>
+        </div>
+        <script>
+          // Replace placeholders with actual student information
+          document.getElementById('student').innerText = '{{student}}';
+          document.getElementById('studentName').innerText = '{{studentName}}';
+          document.getElementById('enrollment').innerText = '{{enrollment}}';
+          document.getElementById('class').innerText = '{{class}}';
+          document.getElementById('batch').innerText = '{{batch}}';
+          document.getElementById('emailId').innerText = '{{emailId}}';
+          document.getElementById('branch').innerText = '{{branch}}';
+          document.getElementById('semester').innerText = '{{semester}}';
+          document.getElementById('guide').innerText = '{{guide}}';
+      </script>
+    <div class="counter-container mbr-text mbr-fonts-style display-7"></div>
+  </div>
+
+</div>
+</div>
+</div>
+</section>
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</section><script src="student_assets/bootstrap/js/bootstrap.bundle.min.js"></script>  <script src="student_assets/smoothscroll/smooth-scroll.js"></script>  <script src="student_assets/ytplayer/index.js"></script>  <script src="student_assets/dropdown/js/navbar-dropdown.js"></script>  <script src="student_assets/theme/js/script.js"></script>  
+  
+  
+</body>
 </html>
