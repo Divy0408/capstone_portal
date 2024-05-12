@@ -138,7 +138,7 @@ app.post('/login', async (req, res) => {
                     res.redirect('/guide_home.html');
                 } else{
                     req.session.coordinator = user;
-                    res.redirect('/coordinator.html');
+                    res.redirect('/coordinator_home.html');
                 }
             } else {
                 // Incorrect password, redirect back to login page with error message
@@ -647,12 +647,47 @@ app.get('/guide-info', async (req, res) => {
         if (result.rows.length > 0) {
             // Render the account.html file with student information injected
             let accountHtml = fs.readFileSync(__dirname + '/guide_info.html', 'utf8');
-            const studentInfo = result.rows[0]; // Assuming only one row per user
+            const guideInfo = result.rows[0]; // Assuming only one row per user
 
             // Inject student information into the HTML file
-            accountHtml = accountHtml.replace('{{guide}}', studentInfo.name);
-            accountHtml = accountHtml.replace('{{guideName}}', studentInfo.name);
-            accountHtml = accountHtml.replace('{{emailId}}', studentInfo.email);
+            accountHtml = accountHtml.replace('{{guide}}', guideInfo.name);
+            accountHtml = accountHtml.replace('{{guideName}}', guideInfo.name);
+            accountHtml = accountHtml.replace('{{emailId}}', guideInfo.email);
+
+            // Send the modified HTML file
+            res.send(accountHtml);
+        } else {
+            res.status(404).send('Guide information not found');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
+// Route to handle coordinator info. page
+app.get('/coordinator-info', async (req, res) => {
+    const coordinator = req.session.coordinator;
+    if (!coordinator) {
+        res.redirect('/login.html?error=Please login to access your account');
+        return;
+    }
+
+    try {
+        const email = coordinator.email;
+        // Query the database to retrieve student information based on enrollment
+        const query = 'SELECT name, email FROM coordinator WHERE email = $1';
+        const result = await client.query(query, [email]);
+
+        if (result.rows.length > 0) {
+            // Render the account.html file with student information injected
+            let accountHtml = fs.readFileSync(__dirname + '/coordinator_info.html', 'utf8');
+            const coordinatorInfo = result.rows[0]; // Assuming only one row per user
+
+            // Inject student information into the HTML file
+            accountHtml = accountHtml.replace('{{coordinator}}', coordinatorInfo.name);
+            accountHtml = accountHtml.replace('{{coordinatorName}}', coordinatorInfo.name);
+            accountHtml = accountHtml.replace('{{emailId}}', coordinatorInfo.email);
 
             // Send the modified HTML file
             res.send(accountHtml);
