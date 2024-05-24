@@ -12,7 +12,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const client = new Client({
-    connectionString: "postgres://root:FnIw2h8j8IPtNS1tc0o7cGNxiputsTIJ@dpg-cnfidpicn0vc73e862r0-a.oregon-postgres.render.com/test_db_jl56",
+    connectionString: "postgres://divy:W3pjTNocqdM7s4j7F7RSAmZJ0Lc5sO48@dpg-cp8ck2ol6cac73c2iu70-a.oregon-postgres.render.com/capstone_portal",
     ssl: {
         rejectUnauthorized: false
     }   
