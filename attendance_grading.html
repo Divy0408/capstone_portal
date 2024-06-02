@@ -213,40 +213,92 @@
                             }
                                                        
                         </style>
-                        <form id="attendance-form">
+                        <form id="attendance-form" action="/attendance" method="post">
+                            <div class="form-group">
+                                <label for="enrollment">Enrollment:</label>
+                                <input type="text" id="enrollment" name="enrollment" minlength="11" maxlength="11" required>
+                            </div>
                             <div class="form-group">
                                 <label for="week">Week:</label>
-                                <input type="Number" id="week" name="week" required>
+                                <input type="number" id="week" name="week" min="1" required>
                             </div>
                             <div class="form-group">
                                 <label for="date">Date:</label>
                                 <input type="date" id="date" name="date" required>
                             </div>
-                            
                             <div class="form-group">
                                 <label>Attendance:</label>
-                                <input type="checkbox" id="present" name="present">Present &nbsp;
-                                <input type="checkbox" id="absent" name="absent">Absent
+                                <input type="radio" id="present" name="present" value="true">Present
+                                <input type="radio" id="absent" name="present" value="false">Absent
                             </div>
                             <button type="submit">Submit</button>
                         </form>
-                        <form id="grading-form">
+                        
+                        <form id="grading-form" action="/grading" method="post">
                             <div class="form-group">
-                                <label for="project-name">Team id & name:</label>
-                                <input type="text" id="project-name" name="project-name" required>
+                                <label for="enrollment">Enrollment:</label>
+                                <input type="text" id="enrollment" name="enrollment" minlength="11" maxlength="11" required>
                             </div>
                             <div class="form-group">
                                 <label for="grading">Grading (out of 10):</label>
                                 <input type="number" id="grading" name="grading" min="0" max="10" step="0.1" required>
                             </div>
                             <button type="submit">Submit</button>
-                        </form>
+                        </form>                        
                     
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <script>
+        document.getElementById('attendance-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+            fetch('/attendance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.message) {
+                    alert(result.message);
+                    window.location.reload(); // Display message in an alert box
+                } else {
+                    alert('Error: ' + result.error); // Display error message in an alert box
+                }
+            })
+            .catch(error => {
+                alert('An error occurred: ' + error.message); // Display error message in an alert box
+            });
+        });
+        
+        document.getElementById('grading-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+            fetch('/grading', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.message) {
+                    alert(result.message);
+                    window.location.reload(); // Display message in an alert box
+                } else {
+                    alert('Error: ' + result.error); // Display error message in an alert box
+                }
+            })
+            .catch(error => {
+                alert('An error occurred: ' + error.message); // Display error message in an alert box
+            });
+        });
+    </script>
 </body>
 
 </html>
