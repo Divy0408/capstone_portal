@@ -702,15 +702,43 @@ app.post('/grading', async (req, res) => {
         res.redirect('/login.html?error=Please login to access your account');
         return;
     }
-    const { enrollment, grading } = req.body;
+
+    const { enrollment, first_internal, second_internal, external } = req.body;
+
+    // Build the query dynamically based on provided values
+    let query = 'UPDATE students SET ';
+    const values = [];
+    let count = 1;
+
+    if (first_internal !== undefined && first_internal !== '') {
+        query += `first_internal_marks = $${count}, `;
+        values.push(parseInt(first_internal));
+        count++;
+    }
+
+    if (second_internal !== undefined && second_internal !== '') {
+        query += `second_internal_marks = $${count}, `;
+        values.push(parseInt(second_internal));
+        count++;
+    }
+
+    if (external !== undefined && external !== '') {
+        query += `external_marks = $${count}, `;
+        values.push(parseInt(external));
+        count++;
+    }
+
+    // Remove the trailing comma and space
+    query = query.slice(0, -2);
+
+    query += ` WHERE enrollment = $${count}`;
+    values.push(enrollment);
+
     try {
-        const result = await client.query(
-            'INSERT INTO grading (enrollment, grading) VALUES ($1, $2) RETURNING *',
-            [enrollment, grading]
-        );
-        res.json({ message: `Graded ${grading} for enrollment: ${enrollment}` });
+        await client.query(query, values);
+        res.json({ message: `Grade submitted for ${enrollment}` });
     } catch (err) {
-        console.error(err);
+        console.error('Database error:', err);
         res.status(500).json({ error: 'Database error' });
     }
 });
