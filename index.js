@@ -857,6 +857,39 @@ app.post('/allocate-examiner/:teamId', async (req, res) => {
     }
 });
 
+//Route to Schedule Exams
+app.post('/schedule-exam', async (req, res) => {
+    try {
+        const { date, time, examName } = req.body;
+
+        const insertQuery = 'INSERT INTO exams (date, time, exam_name) VALUES ($1, $2, $3)';
+        await client.query(insertQuery, [date, time, examName]);
+
+        // Generate the notification message
+        const notificationMessage = `Exam scheduled for ${date} at ${time} for ${examName}`;
+
+        // Pass the notification message to the send-notification route
+        const response = await fetch('/send-notification', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: notificationMessage })
+        });
+
+        // Check if the notification was sent successfully
+        if (response.ok) {
+            // Send a success response
+            res.status(200).json({ message: 'Exam scheduled successfully and notification sent' });
+        } else {
+            throw new Error('Failed to send notification');
+        }
+    } catch (error) {
+        console.error('Error scheduling exam:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // Route to handle logout
 app.get('/logout', function (req, res) {
     try {
