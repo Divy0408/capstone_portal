@@ -403,8 +403,28 @@ app.get('/project', async (req, res) => {
     }
 });
 
+// Route to get the logged-in student's project details
+app.post('/get_project_details', async (req, res) => {
+    const student = req.session.student;
+    if (!student) {
+        res.status(401).json({ error: 'Not authenticated' });
+        return;
+    }
+    try {
+        const result = await client.query('SELECT * FROM projects WHERE enrollment = $1', [student.enrollment]);
+        if (result.rows.length > 0) {
+            res.json(result.rows[0]);
+        } else {
+            res.json({ error: 'No project details found' });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // Route to handle form submission of project
-app.post('/project', upload.single('upload-file'), async (req, res) => {
+app.post('/project', async (req, res) => {
     const student = req.session.student;
     if (!student) {
         res.redirect('/login.html?error=Please login to access your account');
@@ -412,22 +432,19 @@ app.post('/project', upload.single('upload-file'), async (req, res) => {
     }
     try {
         // Extract form data
-        const { teamID, studentName, studentErNo, branch, projectTitle, projectDescription, additionalComments } = req.body;
-
-        // Retrieve uploaded file
-        const uploadFile = req.file;
+        const { teamID, studentName, studentErNo, branch, projectTitle, projectDescription, githubLink, additionalComments } = req.body;
 
         // Check if record with the same enrollment number exists
         const existingRecord = await client.query('SELECT * FROM projects WHERE enrollment = $1', [studentErNo]);
 
         if (existingRecord.rows.length > 0) {
             // If record exists, update it
-            const updateQuery = 'UPDATE projects SET team_id = $1, student_name = $2, branch = $3, project_title = $4, project_description = $5, file_path = $6, additional_comments = $7 WHERE enrollment = $8';
-            await client.query(updateQuery, [teamID, studentName, branch, projectTitle, projectDescription, uploadFile, additionalComments, studentErNo]);
+            const updateQuery = 'UPDATE projects SET team_id = $1, student_name = $2, branch = $3, project_title = $4, project_description = $5, github_link = $6, additional_comments = $7 WHERE enrollment = $8';
+            await client.query(updateQuery, [teamID, studentName, branch, projectTitle, projectDescription, githubLink, additionalComments, studentErNo]);
         } else {
             // If record doesn't exist, insert a new record
-            const insertQuery = 'INSERT INTO projects (team_id, student_name, enrollment, branch, project_title, project_description, file_path, additional_comments) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
-            await client.query(insertQuery, [teamID, studentName, studentErNo, branch, projectTitle, projectDescription, uploadFile, additionalComments]);
+            const insertQuery = 'INSERT INTO projects (team_id, student_name, enrollment, branch, project_title, project_description, github_link, additional_comments) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
+            await client.query(insertQuery, [teamID, studentName, studentErNo, branch, projectTitle, projectDescription, githubLink, additionalComments]);
         }
         // Send a success response
         res.redirect('/student_home.html');
