@@ -164,6 +164,7 @@
                 <p>Attendance: <span id="attendance"></span>%</p>
                 <p>First Internal Marks: <span id="firstInternalMarks"></span></p>
                 <p>Second Internal Marks: <span id="secondInternalMarks"></span></p>
+                <p>External Exam Marks: <span id="externalMarks"></span></p>
               </div>
               <div id="weekAttendance"></div>
 
@@ -173,6 +174,7 @@
                 document.getElementById('attendance').innerText = '{{attendance}}';
                 document.getElementById('firstInternalMarks').innerText = '{{firstInternalMarks}}';
                 document.getElementById('secondInternalMarks').innerText = '{{secondInternalMarks}}';
+                document.getElementById('externalMarks').innerText = '{{externalMarks}}';
                 // Replace placeholders with actual week-wise attendance information
                 document.getElementById('weekAttendance').innerHTML = '{{weekAttendance}}';
 

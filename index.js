@@ -624,7 +624,7 @@ app.get('/attendance', async (req, res) => {
         const enrollment = student.enrollment;
         // Query the database to retrieve student attendance information based on enrollment
         const query = `
-            SELECT s.student_name, s.attendance, s.first_internal_marks, s.second_internal_marks, 
+            SELECT s.student_name, s.attendance, s.first_internal_marks, s.second_internal_marks, s.external_marks, 
             CASE WHEN a.present = true THEN 'P' ELSE 'A' END as present_status,
             a.week
             FROM students s
@@ -643,6 +643,7 @@ app.get('/attendance', async (req, res) => {
             attendanceHtml = attendanceHtml.replace('{{attendance}}', attendanceInfo.attendance);
             attendanceHtml = attendanceHtml.replace('{{firstInternalMarks}}', attendanceInfo.first_internal_marks);
             attendanceHtml = attendanceHtml.replace('{{secondInternalMarks}}', attendanceInfo.second_internal_marks);
+            attendanceHtml = attendanceHtml.replace('{{externalMarks}}', attendanceInfo.external_marks);
 
             // Prepare week-wise attendance data
             let weekAttendanceHtml = '';
